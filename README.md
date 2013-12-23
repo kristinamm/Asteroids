@@ -8,4 +8,6 @@ Asteroids
 
 Кристина Марио Милева - фак. № 61674
 
+Катрин Костадинова Картулева - фак. № 61756
+
 A C++, console-based version of the game asteroids.
