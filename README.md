@@ -18,7 +18,7 @@ A C++, console-based version of the game asteroids.
 Tasks
 ======
 General
-
+=======
 Create a repo @ github.com. Send me a mail with a list of all team members and the link to the repo BEFORE 23.12.2013!
 Choose / Invent your own naming convention and explicitly write in the README.md file of your project
 Fix all bugs currently in the game. Implement missing functionality.
@@ -39,7 +39,7 @@ Do all the above adhering to the naming convention of your choice!
 
 
 Asteroids
-
+---------
 Add asteroids of different sizes and colours
 Add space ships of different sizes and colours
 Implement collision detection
