@@ -13,8 +13,8 @@ typedef vector<GameObject>::iterator randomAccess_iterator;
 typedef vector<GameObject>::const_iterator const_iterator;
 
 // Window constants
-const int WindowWidth = 70;
-const int WindowHeight = 30;
+const int WINDOW_WIDTH = 70;
+const int WINDOW_HEIGHT = 30;
 // Asteroid variables
 const char AsteroidSymbol = '#';
 int asteroidSpeed = 1;
@@ -81,8 +81,8 @@ void Update()
         if (frameCounter % asteroidSpawnInterval == 0)
         {
                 // Spawn a new asteroid at every x frames
-                int y = rand() % WindowHeight;
-                asteroids.push_back(GameObject(WindowWidth - 1, y, AsteroidSymbol));
+                int y = rand() % WINDOW_HEIGHT;
+                asteroids.push_back(GameObject(WINDOW_WIDTH - 1, y, AsteroidSymbol));
         }
         ++frameCounter;
 }
@@ -109,7 +109,7 @@ int main()
 
         srand(time(NULL));
 
-        int shipY = WindowHeight / 2;
+        int shipY = WINDOW_HEIGHT / 2;
         int shipX = 1;
         char shipSymbol = '*';
 
