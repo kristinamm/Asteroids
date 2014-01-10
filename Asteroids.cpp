@@ -82,8 +82,29 @@ void Update()
 	if (frameCounter % asteroidSpawnInterval == 0)
 	{
 		// Spawn a new asteroid at every x frames
+
+		//in the console there are more columns than rows
+		//so the asteroids should be wider than taller
+		int asteroidWidth = rand() % 4 + 1; //from 1 to 4
+		int asteroidHeight = rand() % 3 + 1; //from 1 to 3
+
 		int y = rand() % WINDOW_HEIGHT;
 		asteroids.push_back(GameObject(WINDOW_WIDTH - 1, y, AsteroidSymbol));
+
+		for (int i = 0; i < asteroidWidth; i++)
+		{
+			for (int j = 0; j < asteroidHeight; j++)
+			{
+				if (y + j < WINDOW_HEIGHT)
+				{
+					asteroids.push_back(GameObject(WINDOW_WIDTH - 1 - i, y + j, AsteroidSymbol));
+				}
+				else
+				{
+					asteroids.push_back(GameObject(WINDOW_WIDTH - 1 - i, y, AsteroidSymbol));
+				}
+			}
+		}
 	}
 	++frameCounter;
 }
