@@ -52,9 +52,9 @@ void EndGame()
 	endGame = true;
 }
 
-void DetectColisions()
+void DetectCollisions()
 {
-	//detect ship colisions
+	//detect ship collisions
 	for (randomAccess_iterator asteroid = asteroids.begin(); asteroid != asteroids.end(); ++asteroid)
 	{
 		for (randomAccess_iterator shipBody = ship.begin(); shipBody != ship.end(); ++shipBody)
@@ -67,16 +67,21 @@ void DetectColisions()
 			}
 		}
 	}
-	//detect rocket colisions
-	for (randomAccess_iterator asteroid = asteroids.begin(); asteroid != asteroids.end(); ++asteroid)
+	//detect rocket collisions
+
+	//there are issues with different parity of fired rocket x and asteroid x,
+	//so it must be iterated in reverse
+	for (unsigned i = asteroids.size(); i-- > 0; )
 	{
 		for (randomAccess_iterator rocket = rockets.begin(); rocket != rockets.end();)
 		{
-			bool isXEqual = rocket->Coordinates.X == asteroid->Coordinates.X;
-			bool isYEqual = rocket->Coordinates.Y == asteroid->Coordinates.Y;
+			//also needed for parity issues
+			bool isXEqual = rocket->Coordinates.X == asteroids[i].Coordinates.X ||
+				rocket->Coordinates.X + 1 == asteroids[i].Coordinates.X;
+			bool isYEqual = rocket->Coordinates.Y == asteroids[i].Coordinates.Y;
 			if (isXEqual == true && isYEqual == true)
 			{
-				asteroid = asteroids.erase(asteroid);
+				asteroids.erase(asteroids.begin() + i);
 				rocket = rockets.erase(rocket);
 			}
 			else
@@ -168,7 +173,7 @@ void Update()
 				if (y + j < WINDOW_HEIGHT)
 				{
 					GameObject newAsteroid = GameObject(WINDOW_WIDTH - 1 - i, y + j, AsteroidSymbol);
-					newAsteroid.Color = ConsoleColors::Red;
+					newAsteroid.Color = ConsoleColors::Red; //TODO: add random color asteroids
 					asteroids.push_back(newAsteroid);
 				}
 				else
@@ -221,13 +226,13 @@ int main()
 	while (true)
 	{
 		Update();
-		DetectColisions();
-		
+		DetectCollisions();
+
 		if(endGame == true)
 		{
 			break;
 		}
-		
+
 		Draw();
 		Sleep(sleepDuration);
 	}
