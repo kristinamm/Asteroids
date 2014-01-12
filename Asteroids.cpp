@@ -25,7 +25,7 @@ int shipSpeed = 1;
 unsigned long sleepDuration = 200;
 
 bool endGame = false;
-int maximumRocketsCount = 3;
+int maximumRocketsCount = 12;
 
 vector<GameObject> ship;
 vector<GameObject> asteroids;
@@ -40,9 +40,22 @@ void Fire()
 	GameObject mainShipElement = ship[3]; 
 	if(rockets.size() < maximumRocketsCount)
 	{
+		//fire 4 rockets at once
 		int firedRocketX = mainShipElement.Coordinates.X + 1;
 		int firedRocketY = mainShipElement.Coordinates.Y;
 		GameObject firedRocket = GameObject(firedRocketX, firedRocketY,'-');
+		rockets.push_back(firedRocket);
+		firedRocketX = mainShipElement.Coordinates.X + 2;
+		firedRocketY = mainShipElement.Coordinates.Y;
+		firedRocket = GameObject(firedRocketX, firedRocketY,'-');
+		rockets.push_back(firedRocket);
+		firedRocketX = mainShipElement.Coordinates.X + 2;
+		firedRocketY = mainShipElement.Coordinates.Y - 1;
+		firedRocket = GameObject(firedRocketX, firedRocketY,'-');
+		rockets.push_back(firedRocket);
+		firedRocketX = mainShipElement.Coordinates.X + 2;
+		firedRocketY = mainShipElement.Coordinates.Y + 1;
+		firedRocket = GameObject(firedRocketX, firedRocketY,'-');
 		rockets.push_back(firedRocket);
 	}
 }
@@ -71,6 +84,7 @@ void DetectCollisions()
 
 	//there are issues with different parity of fired rocket x and asteroid x,
 	//so it must be iterated in reverse
+	//TODO: replace with std::vector<GameObject>::reverse_iterator
 	for (unsigned i = asteroids.size(); i-- > 0; )
 	{
 		for (randomAccess_iterator rocket = rockets.begin(); rocket != rockets.end();)
@@ -238,7 +252,7 @@ int main()
 	}
 
 	ClearScreen(consoleHandle);
-	std::cout<<"Game Over"<<endl;
+	std::cout<<"Game Over, your score is: "<<frameCounter<<endl;
 
 	return 0;
 }
