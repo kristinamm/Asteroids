@@ -14,7 +14,7 @@ typedef vector<GameObject>::const_iterator const_iterator;
 
 // Window constants
 const int WINDOW_WIDTH = 70;
-const int WINDOW_HEIGHT = 27;
+const int WINDOW_HEIGHT = 25;
 // Asteroid variables
 const char AsteroidSymbol = '#';
 int asteroidSpeed = 1;
@@ -24,6 +24,7 @@ int shipSpeed = 1;
 // Game variables
 unsigned long sleepDuration = 200;
 
+bool endGame = false;
 int maximumRocketsCount = 3;
 
 vector<GameObject> ship;
@@ -46,8 +47,44 @@ void Fire()
 	}
 }
 
+void EndGame()
+{
+	endGame = true;
+}
+
 void DetectColisions()
 {
+	//detect ship colisions
+	for (randomAccess_iterator asteroid = asteroids.begin(); asteroid != asteroids.end(); ++asteroid)
+	{
+		for (randomAccess_iterator shipBody = ship.begin(); shipBody != ship.end(); ++shipBody)
+		{
+			bool isXEqual = shipBody->Coordinates.X == asteroid->Coordinates.X;
+			bool isYEqual = shipBody->Coordinates.Y == asteroid->Coordinates.Y;
+			if (isXEqual == true && isYEqual == true)
+			{
+				EndGame();
+			}
+		}
+	}
+	//detect rocket colisions
+	for (randomAccess_iterator asteroid = asteroids.begin(); asteroid != asteroids.end(); ++asteroid)
+	{
+		for (randomAccess_iterator rocket = rockets.begin(); rocket != rockets.end();)
+		{
+			bool isXEqual = rocket->Coordinates.X == asteroid->Coordinates.X;
+			bool isYEqual = rocket->Coordinates.Y == asteroid->Coordinates.Y;
+			if (isXEqual == true && isYEqual == true)
+			{
+				asteroid = asteroids.erase(asteroid);
+				rocket = rockets.erase(rocket);
+			}
+			else
+			{
+				++rocket;
+			}
+		}
+	}
 }
 
 void Update()
@@ -85,13 +122,17 @@ void Update()
 		shipBody->Coordinates.Y += direction.Y;
 	}
 	//update rockets position and remove ones that go out of the screen
-	for (randomAccess_iterator rocket = rockets.begin(); rocket != rockets.end(); ++rocket)
+	for (randomAccess_iterator rocket = rockets.begin(); rocket != rockets.end();)
 	{
+		rocket->Coordinates.X += asteroidSpeed;
 		if(rocket->Coordinates.X > WINDOW_WIDTH)
 		{
 			rocket = rockets.erase(rocket);
 		}
-		rocket->Coordinates.X += asteroidSpeed;
+		else
+		{
+			++rocket;
+		}
 	}
 	// Update the position of all asteroids. Remove any asteroid that goes outside the window
 
@@ -181,9 +222,18 @@ int main()
 	{
 		Update();
 		DetectColisions();
+		
+		if(endGame == true)
+		{
+			break;
+		}
+		
 		Draw();
 		Sleep(sleepDuration);
 	}
+
+	ClearScreen(consoleHandle);
+	std::cout<<"Game Over"<<endl;
 
 	return 0;
 }
