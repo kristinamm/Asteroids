@@ -18,18 +18,37 @@ const int WINDOW_HEIGHT = 27;
 // Asteroid variables
 const char AsteroidSymbol = '#';
 int asteroidSpeed = 1;
-
 // Ship variables
 int shipSpeed = 1;
 
 // Game variables
 unsigned long sleepDuration = 200;
 
+int maximumRocketsCount = 3;
+
 vector<GameObject> ship;
 vector<GameObject> asteroids;
+vector<GameObject> rockets;
 
 unsigned int frameCounter = 0;
 unsigned int asteroidSpawnInterval = 10;
+
+void Fire()
+{
+	//the element of the ship which is in the middle
+	GameObject mainShipElement = ship[3]; 
+	if(rockets.size() < maximumRocketsCount)
+	{
+		int firedRocketX = mainShipElement.Coordinates.X + 1;
+		int firedRocketY = mainShipElement.Coordinates.Y;
+		GameObject firedRocket = GameObject(firedRocketX, firedRocketY,'-');
+		rockets.push_back(firedRocket);
+	}
+}
+
+void DetectColisions()
+{
+}
 
 void Update()
 {
@@ -55,6 +74,9 @@ void Update()
 			direction.X = 0;
 			direction.Y = shipSpeed;
 			break;
+		case ' ':
+			Fire();
+			break;
 		};
 	}
 	for (randomAccess_iterator shipBody = ship.begin(); shipBody != ship.end(); ++shipBody)
@@ -62,7 +84,15 @@ void Update()
 		shipBody->Coordinates.X += direction.X;
 		shipBody->Coordinates.Y += direction.Y;
 	}
-
+	//update rockets position and remove ones that go out of the screen
+	for (randomAccess_iterator rocket = rockets.begin(); rocket != rockets.end(); ++rocket)
+	{
+		if(rocket->Coordinates.X > WINDOW_WIDTH)
+		{
+			rocket = rockets.erase(rocket);
+		}
+		rocket->Coordinates.X += asteroidSpeed;
+	}
 	// Update the position of all asteroids. Remove any asteroid that goes outside the window
 
 
@@ -84,12 +114,11 @@ void Update()
 		// Spawn a new asteroid at every x frames
 
 		//in the console there are more columns than rows
-		//so the asteroids should be wider than taller
+		//so the asteroids should be wider than they are tall
 		int asteroidWidth = rand() % 4 + 1; //from 1 to 4
 		int asteroidHeight = rand() % 3 + 1; //from 1 to 3
 
 		int y = rand() % WINDOW_HEIGHT;
-		asteroids.push_back(GameObject(WINDOW_WIDTH - 1, y, AsteroidSymbol));
 
 		for (int i = 0; i < asteroidWidth; i++)
 		{
@@ -97,7 +126,9 @@ void Update()
 			{
 				if (y + j < WINDOW_HEIGHT)
 				{
-					asteroids.push_back(GameObject(WINDOW_WIDTH - 1 - i, y + j, AsteroidSymbol));
+					GameObject newAsteroid = GameObject(WINDOW_WIDTH - 1 - i, y + j, AsteroidSymbol);
+					newAsteroid.Color = ConsoleColors::Red;
+					asteroids.push_back(newAsteroid);
 				}
 				else
 				{
@@ -122,7 +153,10 @@ void Draw()
 	{
 		asteroid->Draw(consoleHandle);
 	}
-
+	for (randomAccess_iterator rocket = rockets.begin(); rocket != rockets.end(); ++rocket)
+	{
+		rocket->Draw(consoleHandle);
+	}
 }
 
 int main()
@@ -134,7 +168,6 @@ int main()
 	int shipY = WINDOW_HEIGHT / 2;
 	int shipX = 2;
 	char shipSymbol = '*';
-
 	ship.push_back(GameObject(shipX - 2, shipY - 1, shipSymbol));
 	ship.push_back(GameObject(shipX - 1, shipY - 1, shipSymbol));
 	ship.push_back(GameObject(shipX + 1, shipY - 1, shipSymbol));
@@ -147,6 +180,7 @@ int main()
 	while (true)
 	{
 		Update();
+		DetectColisions();
 		Draw();
 		Sleep(sleepDuration);
 	}
