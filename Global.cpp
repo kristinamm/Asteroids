@@ -1,0 +1,1 @@
+//this is where the global variables should be

@@ -36,7 +36,7 @@ unsigned int frameCounter = 0;
 unsigned int asteroidSpawnInterval = 10;
 
 
-void Menu();
+//void Menu();
 
 void Fire()
 {
@@ -248,7 +248,7 @@ void InstructionsMenu()
 		}
 	} while (key != '1' || key != '2');
 }
-
+/*
 void Menu()
 {
 	char key;
@@ -294,7 +294,7 @@ void Menu()
 
 }
 
-
+*/
 
 int main()
 {
@@ -314,7 +314,7 @@ int main()
 	ship.push_back(GameObject(shipX + 1, shipY + 1, shipSymbol));
 
 	Menu();
-	
+
 
 	while (true)
 	{
