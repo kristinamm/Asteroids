@@ -25,6 +25,7 @@ int shipSpeed = 1;
 unsigned long sleepDuration = 200;
 
 bool endGame = false;
+bool exitGame = false;
 int maximumRocketsCount = 12;
 
 vector<GameObject> ship;
@@ -34,28 +35,31 @@ vector<GameObject> rockets;
 unsigned int frameCounter = 0;
 unsigned int asteroidSpawnInterval = 10;
 
+
+void Menu();
+
 void Fire()
 {
 	//the element of the ship which is in the middle
-	GameObject mainShipElement = ship[3]; 
-	if(rockets.size() < maximumRocketsCount)
+	GameObject mainShipElement = ship[3];
+	if (rockets.size() < maximumRocketsCount)
 	{
 		//fire 4 rockets at once
 		int firedRocketX = mainShipElement.Coordinates.X + 1;
 		int firedRocketY = mainShipElement.Coordinates.Y;
-		GameObject firedRocket = GameObject(firedRocketX, firedRocketY,'-');
+		GameObject firedRocket = GameObject(firedRocketX, firedRocketY, '-');
 		rockets.push_back(firedRocket);
 		firedRocketX = mainShipElement.Coordinates.X + 2;
 		firedRocketY = mainShipElement.Coordinates.Y;
-		firedRocket = GameObject(firedRocketX, firedRocketY,'-');
+		firedRocket = GameObject(firedRocketX, firedRocketY, '-');
 		rockets.push_back(firedRocket);
 		firedRocketX = mainShipElement.Coordinates.X + 2;
 		firedRocketY = mainShipElement.Coordinates.Y - 1;
-		firedRocket = GameObject(firedRocketX, firedRocketY,'-');
+		firedRocket = GameObject(firedRocketX, firedRocketY, '-');
 		rockets.push_back(firedRocket);
 		firedRocketX = mainShipElement.Coordinates.X + 2;
 		firedRocketY = mainShipElement.Coordinates.Y + 1;
-		firedRocket = GameObject(firedRocketX, firedRocketY,'-');
+		firedRocket = GameObject(firedRocketX, firedRocketY, '-');
 		rockets.push_back(firedRocket);
 	}
 }
@@ -85,7 +89,7 @@ void DetectCollisions()
 	//there are issues with different parity of fired rocket x and asteroid x,
 	//so it must be iterated in reverse
 	//TODO: replace with std::vector<GameObject>::reverse_iterator
-	for (unsigned i = asteroids.size(); i-- > 0; )
+	for (unsigned i = asteroids.size(); i-- > 0;)
 	{
 		for (randomAccess_iterator rocket = rockets.begin(); rocket != rockets.end();)
 		{
@@ -109,9 +113,9 @@ void DetectCollisions()
 void Update()
 {
 	COORD direction = { 0, 0 };
-	if (kbhit())
+	if (_kbhit())
 	{
-		char key = getch();
+		char key = _getch();
 		switch (key)
 		{
 		case 'a':
@@ -144,7 +148,7 @@ void Update()
 	for (randomAccess_iterator rocket = rockets.begin(); rocket != rockets.end();)
 	{
 		rocket->Coordinates.X += asteroidSpeed;
-		if(rocket->Coordinates.X > WINDOW_WIDTH)
+		if (rocket->Coordinates.X > WINDOW_WIDTH)
 		{
 			rocket = rockets.erase(rocket);
 		}
@@ -219,9 +223,82 @@ void Draw()
 	}
 }
 
+void InstructionsMenu()
+{
+	//ClearScreen(consoleHandle);
+	system("cls");
+	cout << "Some instructions...." << endl;
+
+	cout << "========================================" << endl;
+	cout << "Please press\n";
+	cout << "1 - Main Menu "<< endl;
+	cout << "2 - Quit" << endl;
+	char key;
+	do
+	{
+		key = _getch();
+		switch (key)
+		{
+		case '1':
+			Menu();
+			break;
+		case '2':
+			exitGame = true;
+			return;
+		}
+	} while (key != '1' || key != '2');
+}
+
+void Menu()
+{
+	char key;
+
+	system("cls");
+	//Displays Options
+	cout << "Main Menu\n";
+	cout << "Please make your selection\n";
+	cout << "1 - Start game\n";
+	cout << "2 - Instructions\n";
+	cout << "3 - Hightest score\n";
+	cout << "4 - Options\n";
+	cout << "5 - Quit\n";
+
+	do
+	{
+
+		//get choise
+		key = _getch();
+
+		switch (key)
+		{
+		case '1':
+			// "Start game";
+			return;
+		case '2':
+			cout << "Instructions";
+			InstructionsMenu();
+			return;
+		case '3':
+			cout << "Highest score";
+			break;
+		case '4':
+			cout << "Settings";
+			break;
+		case '5':
+			//exit
+			exitGame = true;
+			return;
+			break;
+		}
+	} while (key != '1' || key != '5');
+
+}
+
+
+
 int main()
 {
-	consoleHandle = GetStdHandle( STD_OUTPUT_HANDLE );
+	consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	srand(time(NULL));
 
@@ -236,15 +313,22 @@ int main()
 	ship.push_back(GameObject(shipX - 2, shipY + 1, shipSymbol));
 	ship.push_back(GameObject(shipX + 1, shipY + 1, shipSymbol));
 
+	Menu();
+	
 
 	while (true)
 	{
 		Update();
 		DetectCollisions();
 
-		if(endGame == true)
+		if (endGame == true)
 		{
 			break;
+		}
+		if (exitGame)
+		{
+			ClearScreen(consoleHandle);
+			return 0;
 		}
 
 		Draw();
@@ -252,7 +336,7 @@ int main()
 	}
 
 	ClearScreen(consoleHandle);
-	std::cout<<"Game Over, your score is: "<<frameCounter<<endl;
-
+	std::cout << "Game Over, your score is: " << frameCounter << endl;
+	//TODO: add highscores in externel file
 	return 0;
 }
