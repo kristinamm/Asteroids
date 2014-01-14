@@ -36,7 +36,6 @@ unsigned int frameCounter = 0;
 unsigned int asteroidSpawnInterval = 10;
 
 
-//void Menu();
 
 void Fire()
 {
@@ -291,6 +290,35 @@ void Menu ()
 	
 }
 
+/*void Options ()
+{
+	cout << "Please make your selection\n";
+	cout << " 1 - Play sounds\n";
+	cout << " 2 - Stop sounds\n";
+	cout << " 3 - Exit\n";
+	
+	do
+	{
+	
+	key = _getch();
+
+		switch (key)
+		{
+		case '1':
+			SoundsOn ();
+			return;
+		case '2':
+			SoundsOff;
+			return;
+		case '3':
+			exitGame = true;
+			return;
+			break;
+		}
+	}
+	while ( key != '1' || key != '3');
+}
+	*/
 
 int main()
 {
