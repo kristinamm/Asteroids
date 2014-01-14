@@ -4,6 +4,7 @@
 #include <time.h>
 
 #include "ConsoleGaming.h"
+#include "Menu.h"
 
 using namespace std;
 
@@ -248,56 +249,12 @@ void InstructionsMenu()
 		}
 	} while (key != '1' || key != '2');
 }
-/*
-void Menu()
-{
-	char key;
-
-	system("cls");
-	//Displays Options
-	cout << "Main Menu\n";
-	cout << "Please make your selection\n";
-	cout << "1 - Start game\n";
-	cout << "2 - Instructions\n";
-	cout << "3 - Hightest score\n";
-	cout << "4 - Options\n";
-	cout << "5 - Quit\n";
-
-	do
-	{
-
-		//get choise
-		key = _getch();
-
-		switch (key)
-		{
-		case '1':
-			// "Start game";
-			return;
-		case '2':
-			cout << "Instructions";
-			InstructionsMenu();
-			return;
-		case '3':
-			cout << "Highest score";
-			break;
-		case '4':
-			cout << "Settings";
-			break;
-		case '5':
-			//exit
-			exitGame = true;
-			return;
-			break;
-		}
-	} while (key != '1' || key != '5');
-
-}
-
-*/
 
 int main()
 {
+
+	Menu::Initialize();
+
 	consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	srand(time(NULL));
@@ -312,9 +269,6 @@ int main()
 	ship.push_back(GameObject(shipX - 1, shipY + 1, shipSymbol));
 	ship.push_back(GameObject(shipX - 2, shipY + 1, shipSymbol));
 	ship.push_back(GameObject(shipX + 1, shipY + 1, shipSymbol));
-
-	Menu();
-
 
 	while (true)
 	{

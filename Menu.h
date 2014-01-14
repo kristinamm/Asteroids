@@ -1,11 +1,14 @@
 #pragma once
 static class Menu
 {
-	void Menu::NewGame();
-	void Menu::LoadGame();
-	private: void Menu::StartGame();
-	void Menu::Instructions();
-	void Menu::HighScore();
-	void Menu::Credits();
+	private: 
+		static void Menu::StartGame();
+	public:
+		static void Menu::Initialize();
+		static void Menu::NewGame();
+		static void Menu::LoadGame();
+		static void Menu::Instructions();
+		static void Menu::HighScore();
+		static void Menu::Credits();
 };
 
