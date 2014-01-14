@@ -227,9 +227,12 @@ void InstructionsMenu()
 {
 	//ClearScreen(consoleHandle);
 	system("cls");
-	cout << "Some instructions...." << endl;
+	cout << "Hello, player! The destiny of Earth is in your hands!"<<endl;
+	cout << "Use the W A S D keys on your keyboard to move."<<endl;
+	cout << "With A you move left, with D - right, with S - up and with W - down. Use the space key  to fire."<<endl;
+	cout << "Hit P for pause. During the game there are more asteroids, they get faster, and they break up into more pieces." << endl;
 
-	cout << "========================================" << endl;
+	cout << "Clear all the asteroids and save the day!" << endl;
 	cout << "Please press\n";
 	cout << "1 - Main Menu "<< endl;
 	cout << "2 - Quit" << endl;
@@ -248,31 +251,25 @@ void InstructionsMenu()
 		}
 	} while (key != '1' || key != '2');
 }
-/*
-void Menu()
+
+void Menu ()
 {
-	char key;
-
 	system("cls");
-	//Displays Options
-	cout << "Main Menu\n";
+	cout << "MAIN MENU\n";
 	cout << "Please make your selection\n";
-	cout << "1 - Start game\n";
-	cout << "2 - Instructions\n";
-	cout << "3 - Hightest score\n";
-	cout << "4 - Options\n";
-	cout << "5 - Quit\n";
-
+	cout << " 1 - Start game\n";
+	cout << " 2 - Instructions\n";
+	cout << " 3 - Highest score\n";
+	cout << " 4 - Options\n";
+	cout << " 5 - Quit\n";
 	do
 	{
-
-		//get choise
-		key = _getch();
+	key = _getch();
 
 		switch (key)
 		{
 		case '1':
-			// "Start game";
+			main ();
 			return;
 		case '2':
 			cout << "Instructions";
@@ -285,16 +282,15 @@ void Menu()
 			cout << "Settings";
 			break;
 		case '5':
-			//exit
 			exitGame = true;
 			return;
 			break;
-		}
-	} while (key != '1' || key != '5');
-
+		}	
+	}
+	 while (key != '1' || key != '5');
+	
 }
 
-*/
 
 int main()
 {
