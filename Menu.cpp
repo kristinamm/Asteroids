@@ -47,8 +47,69 @@ void Menu::Initialize()
 	} while (key != '1' || key != '5');
 }
 void Menu::NewGame(){ }
+
 void Menu::LoadGame(){ }
+
 void Menu::StartGame(){ }
-void Menu::Instructions(){ }
+
+void Menu::Instructions()
+{
+
+	//ClearScreen(consoleHandle);
+	system("cls");
+	std::cout << "Hello, player! The destiny of Earth is in your hands!"<<endl;
+	std::cout << "Use the W A S D keys on your keyboard to move."<<endl;
+	std::cout << "With A you move left, with D - right, with S - up and with W - down. Use the space key  to fire."<<endl;
+	std::cout << "Hit P for pause. During the game there are more asteroids, they get faster, and they break up into more pieces." << endl;
+
+	std::cout << "Clear all the asteroids and save the day!" << endl;
+	std::cout << "Please press\n";
+	std::cout << "1 - Main Menu "<< endl;
+	std::cout << "2 - Quit" << endl;
+	char key;
+	do
+	{
+		key = _getch();
+		switch (key)
+		{
+		case '1':
+			Menu();
+			break;
+		case '2':
+			//	exitGame = true;
+			return;
+		}
+	} while (key != '1' || key != '2');
+}
+
+void Menu::Options() 
+{
+	std::cout << "Please make your selection\n";
+	std::cout << " 1 - Play sounds\n";
+	std::cout << " 2 - Stop sounds\n";
+	std::cout << " 3 - Exit\n";
+	char key;
+	do
+	{
+		key = _getch();
+
+		switch (key)
+		{
+		case '1':
+		//	SoundsOn ();
+			return;
+		case '2':
+	//		SoundsOff;
+			return;
+		case '3':
+	//		exitGame = true;
+			return;
+			break;
+		}
+	}
+	while ( key != '1' || key != '3');
+}
+
 void Menu::HighScore(){ }
+
 void Menu::Credits(){ }

@@ -10,5 +10,6 @@ static class Menu
 		static void Menu::Instructions();
 		static void Menu::HighScore();
 		static void Menu::Credits();
+		static void Menu::Options();
 };
 
