@@ -57,15 +57,15 @@ void Menu::Instructions()
 
 	//ClearScreen(consoleHandle);
 	system("cls");
-	std::cout << "Hello, player! The destiny of Earth is in your hands!"<<endl;
-	std::cout << "Use the W A S D keys on your keyboard to move."<<endl;
-	std::cout << "With A you move left, with D - right, with S - up and with W - down. Use the space key  to fire."<<endl;
-	std::cout << "Hit P for pause. During the game there are more asteroids, they get faster, and they break up into more pieces." << endl;
+	std::cout << "Hello, player! The destiny of Earth is in your hands!"<<std::endl;
+	std::cout << "Use the W A S D keys on your keyboard to move."<<std::endl;
+	std::cout << "With A you move left, with D - right, with S - up and with W - down. Use the space key  to fire."<<std::endl;
+	std::cout << "Hit P for pause. During the game there are more asteroids, they get faster, and they break up into more pieces." << std::endl;
 
-	std::cout << "Clear all the asteroids and save the day!" << endl;
+	std::cout << "Clear all the asteroids and save the day!" << std::endl;
 	std::cout << "Please press\n";
-	std::cout << "1 - Main Menu "<< endl;
-	std::cout << "2 - Quit" << endl;
+	std::cout << "1 - Main Menu "<< std::endl;
+	std::cout << "2 - Quit" << std::endl;
 	char key;
 	do
 	{
