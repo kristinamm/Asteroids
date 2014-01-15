@@ -5,6 +5,7 @@
 
 #include "ConsoleGaming.h"
 #include "Menu.h"
+#include "Global.h"
 
 using namespace std;
 
@@ -12,6 +13,7 @@ HANDLE consoleHandle;
 
 typedef vector<GameObject>::iterator randomAccess_iterator;
 typedef vector<GameObject>::const_iterator const_iterator;
+
 
 // Window constants
 const int WINDOW_WIDTH = 70;
@@ -36,31 +38,113 @@ vector<GameObject> rockets;
 unsigned int frameCounter = 0;
 unsigned int asteroidSpawnInterval = 10;
 
+void InitializeShip()
+{
+	int shipY = WINDOW_HEIGHT / 2;
+	int shipX = 2;
+	char shipSymbol = '~';
 
+	#pragma region ship_Types
+		int const charRows = 50;
+		int const charCols = 50;
+		char shipType1[charRows][charCols] = {
+			{ '|', '-', '\\' },
+			{ '=', ' ', '[', '_', '|', 'H', ')', '-', '-', '.', '_', '_', '_', '_', '_' },
+			{ '=', ' ', '[', '+', '-', '-', ',', ' ', ',', '-', '-', '-', '-', '-', '-', '-', '\'' },
+			{ '[', '|', ' ', '_', ' ', '/' }
+		};
+		char shipType2[charRows][charCols] = {
+			{ ' ', '(', '}' },
+			{ '<', '/', '\\' },
+			{ ' ', '|', '\\', '\'', '-', '.', '_' },
+			{ '/', ' ', '|', ' ', ' ', ' ', ' ', '`' },
+			{ '`', ' ', ' ', '`', }
+		};
+	#pragma endregion contains types of different ships
+
+	switch (Global::shipType)
+	{
+	case 1:
+		ship.push_back(GameObject(shipX - 2, shipY - 1, shipSymbol));
+		ship.push_back(GameObject(shipX - 1, shipY - 1, shipSymbol));
+		ship.push_back(GameObject(shipX + 1, shipY - 1, shipSymbol));
+		ship.push_back(GameObject(shipX, shipY, shipSymbol));
+		ship.push_back(GameObject(shipX - 1, shipY + 1, shipSymbol));
+		ship.push_back(GameObject(shipX - 2, shipY + 1, shipSymbol));
+		ship.push_back(GameObject(shipX + 1, shipY + 1, shipSymbol));
+		break;
+	case 2:
+		for (int rows = 0; rows < charRows; rows++)
+		{
+			for (int  cols = 0; cols < charCols; cols++)
+			{
+				if (shipType1[rows][cols] != NULL)
+				{
+					ship.push_back(GameObject(cols + 2, rows+WINDOW_HEIGHT/2, shipType1[rows][cols]));
+				}
+			}
+		}
+		break;
+	case 3:
+		for (int rows = 0; rows < charRows; rows++)
+		{
+			for (int cols = 0; cols < charCols; cols++)
+			{
+				if (shipType2[rows][cols] != NULL)
+				{
+					ship.push_back(GameObject(cols + 2, rows + WINDOW_HEIGHT / 2, shipType2[rows][cols]));
+				}
+			}
+		}
+		break;
+	case 4:
+		break;
+	}
+}
 
 void Fire()
 {
-	//the element of the ship which is in the middle
-	GameObject mainShipElement = ship[3];
+	
+	
 	if (rockets.size() < maximumRocketsCount)
 	{
-		//fire 4 rockets at once
-		int firedRocketX = mainShipElement.Coordinates.X + 1;
-		int firedRocketY = mainShipElement.Coordinates.Y;
-		GameObject firedRocket = GameObject(firedRocketX, firedRocketY, '-');
-		rockets.push_back(firedRocket);
-		firedRocketX = mainShipElement.Coordinates.X + 2;
-		firedRocketY = mainShipElement.Coordinates.Y;
-		firedRocket = GameObject(firedRocketX, firedRocketY, '-');
-		rockets.push_back(firedRocket);
-		firedRocketX = mainShipElement.Coordinates.X + 2;
-		firedRocketY = mainShipElement.Coordinates.Y - 1;
-		firedRocket = GameObject(firedRocketX, firedRocketY, '-');
-		rockets.push_back(firedRocket);
-		firedRocketX = mainShipElement.Coordinates.X + 2;
-		firedRocketY = mainShipElement.Coordinates.Y + 1;
-		firedRocket = GameObject(firedRocketX, firedRocketY, '-');
-		rockets.push_back(firedRocket);
+		if (Global::shipType==1)
+		{
+			//the element of the ship which is in the middle
+			GameObject mainShipElement = ship[3];
+			//fire 4 rockets at once
+			int firedRocketX = mainShipElement.Coordinates.X + 1;
+			int firedRocketY = mainShipElement.Coordinates.Y;
+			GameObject firedRocket = GameObject(firedRocketX, firedRocketY, '-');
+			rockets.push_back(firedRocket);
+			firedRocketX = mainShipElement.Coordinates.X + 2;
+			firedRocketY = mainShipElement.Coordinates.Y;
+			firedRocket = GameObject(firedRocketX, firedRocketY, '-');
+			rockets.push_back(firedRocket);
+			firedRocketX = mainShipElement.Coordinates.X + 2;
+			firedRocketY = mainShipElement.Coordinates.Y - 1;
+			firedRocket = GameObject(firedRocketX, firedRocketY, '-');
+			rockets.push_back(firedRocket);
+			firedRocketX = mainShipElement.Coordinates.X + 2;
+			firedRocketY = mainShipElement.Coordinates.Y + 1;
+			firedRocket = GameObject(firedRocketX, firedRocketY, '-');
+			rockets.push_back(firedRocket);
+		}
+		if (Global::shipType == 2)
+		{
+			//the element of the ship which is in the middle
+			GameObject mainShipElement = ship[33];
+			//fire 2 rockets at once
+			int firedRocketX = mainShipElement.Coordinates.X + 1;
+			int firedRocketY = mainShipElement.Coordinates.Y;
+			GameObject firedRocket = GameObject(firedRocketX, firedRocketY, '-');
+			rockets.push_back(firedRocket);
+			firedRocketX = mainShipElement.Coordinates.X + 1;
+			firedRocketY = mainShipElement.Coordinates.Y - 1;
+			firedRocket = GameObject(firedRocketX, firedRocketY, '_');
+			rockets.push_back(firedRocket);
+		}
+		
 	}
 }
 
@@ -233,16 +317,7 @@ int main()
 	srand(time(NULL));
 
 	//add the ship
-	int shipY = WINDOW_HEIGHT / 2;
-	int shipX = 2;
-	char shipSymbol = '~';
-	ship.push_back(GameObject(shipX - 2, shipY - 1, shipSymbol));
-	ship.push_back(GameObject(shipX - 1, shipY - 1, shipSymbol));
-	ship.push_back(GameObject(shipX + 1, shipY - 1, shipSymbol));
-	ship.push_back(GameObject(shipX, shipY, shipSymbol));
-	ship.push_back(GameObject(shipX - 1, shipY + 1, shipSymbol));
-	ship.push_back(GameObject(shipX - 2, shipY + 1, shipSymbol));
-	ship.push_back(GameObject(shipX + 1, shipY + 1, shipSymbol));
+	InitializeShip();
 
 	//game loop
 	while (true)
