@@ -46,11 +46,16 @@ void Menu::Initialize()
 		}
 	} while (key != '1' || key != '5');
 }
-void Menu::NewGame(){ }
+void Menu::NewGame()
+{
+
+}
 
 void Menu::LoadGame(){ }
 
-void Menu::StartGame(){ }
+void Menu::StartGame()
+{
+}
 
 void Menu::Instructions()
 {

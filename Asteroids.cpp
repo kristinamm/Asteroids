@@ -235,7 +235,7 @@ int main()
 	//add the ship
 	int shipY = WINDOW_HEIGHT / 2;
 	int shipX = 2;
-	char shipSymbol = '*';
+	char shipSymbol = '~';
 	ship.push_back(GameObject(shipX - 2, shipY - 1, shipSymbol));
 	ship.push_back(GameObject(shipX - 1, shipY - 1, shipSymbol));
 	ship.push_back(GameObject(shipX + 1, shipY - 1, shipSymbol));
