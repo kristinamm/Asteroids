@@ -7,6 +7,7 @@ namespace Global
 	int g_level = 1;
 	std::string g_playerName = "";
 	bool isSoundOn = true;
+	int shipType = 2;
 	char upKey = 'w';
 	char downKey = 's';
 	char leftKey = 'a';
