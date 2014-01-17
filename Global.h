@@ -5,7 +5,13 @@
 namespace Global
 {
 	int g_level = 1;
-	int g_credits = 0;
+	/* points of the player */
+	int g_playerCredits = 0;
+	/* 
+	1-st, 2-nd and 3-rd place points */
+	int g_1place = 0;
+	int g_2place = 0;
+	int g_3place = 0;
 	std::string g_playerName = "";
 	bool isSoundOn = true;
 	int shipType = 2;
