@@ -5,6 +5,7 @@
 namespace Global
 {
 	int g_level = 1;
+	int g_credits = 0;
 	std::string g_playerName = "";
 	bool isSoundOn = true;
 	int shipType = 2;
