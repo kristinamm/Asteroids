@@ -48,7 +48,7 @@ void Menu::Initialize()
 }
 void Menu::NewGame()
 {
-
+ // Player enters his name
 }
 
 void Menu::LoadGame(){ }
@@ -143,6 +143,23 @@ void Menu::Options()
 	while ( key != '1' || key != '3');
 }
 
-void Menu::HighScore(){ }
+void Menu::HighScore ( int g_1place, int g_2place, int g_3place, int g_playerCredits, int g_playerName, int g_level)
+{
+	if (g_playerCredits >= g_3place)
+	{
+		g_3place = g_playerCredits;
+		std::cout << "Place 3 " << g_playerName << "scores " << g_playerCredits << "level " << g_level << std::endl;
+	}
+	if (g_playerCredits >= g_2place)
+	{
+		g_2place = g_playerCredits;
+		std::cout << "Place 2 " << g_playerName << "scores " << g_playerCredits << "level " << g_level << std::endl;
+	}
+	if (g_playerCredits >= g_1place)
+	{
+		g_1place = g_playerCredits;
+		std::cout << "Place 1 " << g_playerName << "scores " << g_playerCredits << "level " << g_level << std::endl;
+	}
+}
 
 void Menu::Credits(){ }
