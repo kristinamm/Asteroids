@@ -2,6 +2,7 @@
 #include <vector>
 #include <conio.h>
 #include <time.h>
+#include <iomanip>
 
 #include "ConsoleGaming.h"
 #include "Menu.h"
@@ -23,6 +24,10 @@ const char AsteroidSymbol = '#';
 int asteroidSpeed = 1;
 // Ship variables
 int shipSpeed = 1;
+
+int levelPassPoints = 100;
+int currentLevel = 1;
+int maximumAsteroidSize = 4;
 
 // Game variables
 unsigned long sleepDuration = 200;
@@ -264,16 +269,31 @@ void Update()
 		}
 	}
 
+	if (frameCounter % levelPassPoints == 0 && frameCounter != 0)
+	{
+		if (asteroidSpawnInterval != 0 && sleepDuration != 0)
+		{
+			levelPassPoints += 50;
+			sleepDuration -= 15;
+			currentLevel += 1;
+			maximumAsteroidSize += 1;
+		}
+		if(currentLevel & 1 == 0)
+		{
+			asteroidSpawnInterval -= 1;
+		}
+	}
+
 	if (frameCounter % asteroidSpawnInterval == 0)
 	{
 		// Spawn a new asteroid at every x frames
 
 		//in the console there are more columns than rows
 		//so the asteroids should be wider than they are tall
-		int asteroidWidth = rand() % 4 + 1; //from 1 to 4
-		int asteroidHeight = rand() % 3 + 1; //from 1 to 3
+		int asteroidWidth = rand() % maximumAsteroidSize + 2; //from 1 to 4
+		int asteroidHeight = rand() % maximumAsteroidSize + 1; //from 1 to 3
 
-		int y = rand() % WINDOW_HEIGHT;
+		int y = rand() % (WINDOW_HEIGHT - 3) + 3;
 
 		for (int i = 0; i < asteroidWidth; i++)
 		{
@@ -298,6 +318,14 @@ void Update()
 void Draw()
 {
 	ClearScreen(consoleHandle);
+
+	//highscore
+	std::cout<<setw(20)<<"Level: "<<currentLevel;
+	std::cout<<setw(40)<<"Score: "<<frameCounter * 2<<endl;
+	for (int i = 0; i < WINDOW_WIDTH; i++)
+	{
+		cout<<"-";
+	}
 
 	for (const_iterator shipBody = ship.cbegin(); shipBody != ship.cend(); ++shipBody)
 	{

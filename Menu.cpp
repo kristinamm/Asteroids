@@ -2,6 +2,7 @@
 #include <vector>
 #include <conio.h>
 #include <time.h>
+#include <iomanip>
 
 #include "ConsoleGaming.h"
 #include "Menu.h"
@@ -11,8 +12,8 @@ void Menu::Initialize()
 
 	system("cls");
 	//Displays Options
-	std::cout << setw (39) << "MAIN MENU"<< std::endl;
-	std::cout << setw (57) << "Please make your selection"<< std::endl;
+	std::cout << std::setw(39) << "MAIN MENU"<< std::endl;
+	std::cout << std::setw(57) << "Please make your selection"<< std::endl;
 	std::cout << "1 - Start game\n";
 	std::cout << "2 - Instructions\n";
 	std::cout << "3 - Hightest score\n";
@@ -84,7 +85,7 @@ void Menu::Instructions()
 	}
 	*/
 
-	std::cout << setw(41) << "Instructions"<< std::endl;
+	std::cout << std::setw(41) << "Instructions"<< std::endl;
 	std::cout << "Hello, player! The destiny of Earth is in your hands!"<<std::endl;
 	std::cout << "Your mission is to destroy as many asteroids as you can.\n";
 	std::cout << "During the game there are more asteroids, they get faster, and they break up into more pieces.\n";
@@ -116,8 +117,8 @@ void Menu::Instructions()
 
 void Menu::Options() 
 {
-	std::cout << setw (38) << "Options"<< std::endl;
-	std::cout << setw (57) << "Please make your selection"<< std::endl;
+	std::cout << std::setw (38) << "Options"<< std::endl;
+	std::cout << std::setw (57) << "Please make your selection"<< std::endl;
 	std::cout << " 1 - Play sounds\n";
 	std::cout << " 2 - Stop sounds\n";
 	std::cout << " 3 - Exit\n";
