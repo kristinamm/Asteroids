@@ -9,9 +9,24 @@ namespace Global
 	int g_playerCredits = 0;
 	/* 
 	1-st, 2-nd and 3-rd place points */
-	int g_1place = 0;
-	int g_2place = 0;
-	int g_3place = 0;
+	struct g_1place
+	{
+		char name = "";
+		int points = 0;
+		int level = 1;
+	};
+	struct g_2place 
+	{
+		char name = "";
+		int points = 0;
+		int level = 1;
+	};
+	struct g_3place 
+	{
+		char name = "";
+		int points = 0;
+		int level = 1;
+	};
 	std::string g_playerName = "";
 	bool isSoundOn = true;
 	int shipType = 1;
