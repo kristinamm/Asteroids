@@ -7,11 +7,11 @@ namespace Global
 	int g_level = 1;
 	std::string g_playerName = "";
 	bool isSoundOn = true;
-	int shipType = 2;
-	char upKey = 'w';
-	char downKey = 's';
-	char leftKey = 'a';
-	char rightKey = 'd';
-	char fireKey = ' ';
+	int shipType = 1;
+	const char upKey = 'w';
+	const char downKey = 's';
+	const char leftKey = 'a';
+	const char rightKey = 'd';
+	const char fireKey = ' ';
 	ConsoleColor shipColor = ConsoleColors::White;
 }

@@ -35,6 +35,8 @@ vector<GameObject> ship;
 vector<GameObject> asteroids;
 vector<GameObject> rockets;
 
+vector<int> d(342342);
+
 unsigned int frameCounter = 0;
 unsigned int asteroidSpawnInterval = 10;
 
@@ -44,23 +46,23 @@ void InitializeShip()
 	int shipX = 2;
 	char shipSymbol = '~';
 
-	#pragma region ship_Types
-		int const charRows = 50;
-		int const charCols = 50;
-		char shipType1[charRows][charCols] = {
-			{ '|', '-', '\\' },
-			{ '=', ' ', '[', '_', '|', 'H', ')', '-', '-', '.', '_', '_', '_', '_', '_' },
-			{ '=', ' ', '[', '+', '-', '-', ',', ' ', ',', '-', '-', '-', '-', '-', '-', '-', '\'' },
-			{ '[', '|', ' ', '_', ' ', '/' }
-		};
-		char shipType2[charRows][charCols] = {
-			{ ' ', '(', '}' },
-			{ '<', '/', '\\' },
-			{ ' ', '|', '\\', '\'', '-', '.', '_' },
-			{ '/', ' ', '|', ' ', ' ', ' ', ' ', '`' },
-			{ '`', ' ', ' ', '`', }
-		};
-	#pragma endregion contains types of different ships
+#pragma region ship_Types
+	int const charRows = 50;
+	int const charCols = 50;
+	char shipType1[charRows][charCols] = {
+		{ '|', '-', '\\' },
+		{ '=', ' ', '[', '_', '|', 'H', ')', '-', '-', '.', '_', '_', '_', '_', '_' },
+		{ '=', ' ', '[', '+', '-', '-', ',', ' ', ',', '-', '-', '-', '-', '-', '-', '-', '\'' },
+		{ '[', '|', ' ', '_', ' ', '/' }
+	};
+	char shipType2[charRows][charCols] = {
+		{ ' ', '(', '}' },
+		{ '<', '/', '\\' },
+		{ ' ', '|', '\\', '\'', '-', '.', '_' },
+		{ '/', ' ', '|', ' ', ' ', ' ', ' ', '`' },
+		{ '`', ' ', ' ', '`', }
+	};
+#pragma endregion contains types of different ships
 
 	switch (Global::shipType)
 	{
@@ -104,8 +106,8 @@ void InitializeShip()
 
 void Fire()
 {
-	
-	
+
+
 	if (rockets.size() < maximumRocketsCount)
 	{
 		if (Global::shipType==1)
@@ -144,7 +146,7 @@ void Fire()
 			firedRocket = GameObject(firedRocketX, firedRocketY, '_');
 			rockets.push_back(firedRocket);
 		}
-		
+
 	}
 }
 
@@ -172,9 +174,9 @@ void DetectCollisions()
 
 	//there are issues with different parity of fired rocket x and asteroid x,
 	//so it must be iterated in reverse
-	//TODO: replace with std::vector<GameObject>::reverse_iterator
-	for (unsigned i = asteroids.size(); i-- > 0;)
+	for (int i = asteroids.size() - 1; i >= 0; i--)
 	{
+		bool deleteAsteroid = false;
 		for (randomAccess_iterator rocket = rockets.begin(); rocket != rockets.end();)
 		{
 			//also needed for parity issues
@@ -183,13 +185,17 @@ void DetectCollisions()
 			bool isYEqual = rocket->Coordinates.Y == asteroids[i].Coordinates.Y;
 			if (isXEqual == true && isYEqual == true)
 			{
-				asteroids.erase(asteroids.begin() + i);
+				deleteAsteroid = true;
 				rocket = rockets.erase(rocket);
 			}
 			else
 			{
 				++rocket;
 			}
+		}
+		if(deleteAsteroid == true)
+		{
+			i = std::distance(asteroids.begin(), asteroids.erase(asteroids.begin() + i));
 		}
 	}
 }
@@ -202,23 +208,23 @@ void Update()
 		char key = _getch();
 		switch (key)
 		{
-		case 'a':
+		case Global::leftKey:
 			direction.X = -shipSpeed;
 			direction.Y = 0;
 			break;
-		case 'w':
+		case Global::upKey:
 			direction.X = 0;
 			direction.Y = -shipSpeed;
 			break;
-		case 'd':
+		case Global::rightKey:
 			direction.X = shipSpeed;
 			direction.Y = 0;
 			break;
-		case 's':
+		case Global::downKey:
 			direction.X = 0;
 			direction.Y = shipSpeed;
 			break;
-		case ' ':
+		case Global::fireKey:
 			Fire();
 			break;
 		};
@@ -229,6 +235,7 @@ void Update()
 		shipBody->Coordinates.Y += direction.Y;
 	}
 	//update rockets position and remove ones that go out of the screen
+
 	for (randomAccess_iterator rocket = rockets.begin(); rocket != rockets.end();)
 	{
 		rocket->Coordinates.X += asteroidSpeed;
@@ -241,8 +248,8 @@ void Update()
 			++rocket;
 		}
 	}
-	// Update the position of all asteroids. Remove any asteroid that goes outside the window
 
+	// Update the position of all asteroids. Remove any asteroid that goes outside the window
 
 	for (randomAccess_iterator asteroid = asteroids.begin(); asteroid != asteroids.end();)
 	{
