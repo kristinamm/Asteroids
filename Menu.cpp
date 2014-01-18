@@ -11,8 +11,8 @@ void Menu::Initialize()
 
 	system("cls");
 	//Displays Options
-	std::cout << "Main Menu\n";
-	std::cout << "Please make your selection\n";
+	std::cout << setw (39) << "MAIN MENU"<< std::endl;
+	std::cout << setw (57) << "Please make your selection"<< std::endl;
 	std::cout << "1 - Start game\n";
 	std::cout << "2 - Instructions\n";
 	std::cout << "3 - Hightest score\n";
@@ -48,7 +48,7 @@ void Menu::Initialize()
 }
 void Menu::NewGame()
 {
-
+ // Player enters his name
 }
 
 void Menu::LoadGame(){ }
@@ -84,6 +84,7 @@ void Menu::Instructions()
 	}
 	*/
 
+	std::cout << setw(41) << "Instructions"<< std::endl;
 	std::cout << "Hello, player! The destiny of Earth is in your hands!"<<std::endl;
 	std::cout << "Your mission is to destroy as many asteroids as you can.\n";
 	std::cout << "During the game there are more asteroids, they get faster, and they break up into more pieces.\n";
@@ -115,7 +116,8 @@ void Menu::Instructions()
 
 void Menu::Options() 
 {
-	std::cout << "Please make your selection\n";
+	std::cout << setw (38) << "Options"<< std::endl;
+	std::cout << setw (57) << "Please make your selection"<< std::endl;
 	std::cout << " 1 - Play sounds\n";
 	std::cout << " 2 - Stop sounds\n";
 	std::cout << " 3 - Exit\n";
@@ -141,6 +143,23 @@ void Menu::Options()
 	while ( key != '1' || key != '3');
 }
 
-void Menu::HighScore(){ }
+void Menu::HighScore ( int g_1place, int g_2place, int g_3place, int g_playerCredits, int g_playerName, int g_level)
+{
+	if (g_playerCredits >= g_3place)
+	{
+		g_3place = g_playerCredits;
+		std::cout << "Place 3 " << g_playerName << "scores " << g_playerCredits << "level " << g_level << std::endl;
+	}
+	if (g_playerCredits >= g_2place)
+	{
+		g_2place = g_playerCredits;
+		std::cout << "Place 2 " << g_playerName << "scores " << g_playerCredits << "level " << g_level << std::endl;
+	}
+	if (g_playerCredits >= g_1place)
+	{
+		g_1place = g_playerCredits;
+		std::cout << "Place 1 " << g_playerName << "scores " << g_playerCredits << "level " << g_level << std::endl;
+	}
+}
 
 void Menu::Credits(){ }
