@@ -144,23 +144,33 @@ void Menu::Options()
 	while ( key != '1' || key != '3');
 }
 
-void Menu::HighScore ( int g_1place, int g_2place, int g_3place, int g_playerCredits, int g_playerName, int g_level)
+void Menu::HighScore ( stuct g_1place, struct g_2place, struct g_3place, int g_playerCredits, char g_playerName, int g_level)
 {
-	if (g_playerCredits >= g_3place)
+	if (g_playerCredits >= g_3place.points)
 	{
-		g_3place = g_playerCredits;
-		std::cout << "Place 3 " << g_playerName << "scores " << g_playerCredits << "level " << g_level << std::endl;
+		g_3place.points = g_playerCredits;
+		g_3place.name = g_playerName;
+		g_3place.level = g_level;
+		
 	}
-	if (g_playerCredits >= g_2place)
+	if (g_playerCredits >= g_2place.points)
 	{
-		g_2place = g_playerCredits;
-		std::cout << "Place 2 " << g_playerName << "scores " << g_playerCredits << "level " << g_level << std::endl;
+		g_2place.points = g_playerCredits;
+		g_2place.name = g_playerName;
+		g_2place.level = g_level;
+	
 	}
-	if (g_playerCredits >= g_1place)
+	if (g_playerCredits >= g_1place.points)
 	{
-		g_1place = g_playerCredits;
-		std::cout << "Place 1 " << g_playerName << "scores " << g_playerCredits << "level " << g_level << std::endl;
+		g_1place.points = g_playerCredits;
+		g_1place.name = g_playerName;
+		g_1place.level = g_level;
+	
 	}
+	
+	std::cout << "1-st place " << g_1place.name << " scores " << g_1place.points << " level " << g_1place.level << std::endl;
+	std::cout << "2-nd place " << g_2place.name << " scores " << g_2place.points << " level " << g_2place.level << std::endl;
+	std::cout << "3-rd place " << g_3place.name << " scores " << g_3place.points << " level " << g_3place.level << std::endl;
 }
 
 void Menu::Credits(){ }
