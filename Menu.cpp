@@ -4,8 +4,11 @@
 #include <time.h>
 #include <iomanip>
 
+#include "configParser.cpp"
 #include "ConsoleGaming.h"
 #include "Menu.h"
+#include "Global.h"
+
 void Menu::Initialize() 
 {
 	char key;
@@ -56,35 +59,15 @@ void Menu::LoadGame(){ }
 
 void Menu::StartGame()
 {
+	//write all of the fields from the config file in the global.h file
+	//example for upkey
+	ConfigFile config("game.cfg");
+	Global::upKey = config.getValueOfKey<char>("upKey");
 }
 
 void Menu::Instructions()
 {
-
-	//ClearScreen(consoleHandle);
 	system("cls");
-	/*
-	#define BLUE 1
-	#define GREEN 2
-	#define RED 3
-	#define YELLOW 4
-	#define WHITE 5
-	HANDLE screen;
-	int textcolor = YELLOW;
-	int backgroundcolor = BLACK;
-	screen = GetStdHandle(STD_OUTPUT_HANDLE);
-	
-	void TextColor(int fontcolor,int backgroundcolor,HANDLE screen)
-	{
-	
-	int color_attribute;
-	color_attribute = backgroundcolor;
-	color_attribute = _rotl(color_attribute,4) | fontcolor;
-	SetConsoleTextAttribute(screen,color_attribute);
-	
-	}
-	*/
-
 	std::cout << std::setw(41) << "Instructions"<< std::endl;
 	std::cout << "Hello, player! The destiny of Earth is in your hands!"<<std::endl;
 	std::cout << "Your mission is to destroy as many asteroids as you can.\n";
@@ -144,33 +127,13 @@ void Menu::Options()
 	while ( key != '1' || key != '3');
 }
 
-void Menu::HighScore ( stuct g_1place, struct g_2place, struct g_3place, int g_playerCredits, char g_playerName, int g_level)
+void Menu::HighScore ()
 {
-	if (g_playerCredits >= g_3place.points)
-	{
-		g_3place.points = g_playerCredits;
-		g_3place.name = g_playerName;
-		g_3place.level = g_level;
-		
-	}
-	if (g_playerCredits >= g_2place.points)
-	{
-		g_2place.points = g_playerCredits;
-		g_2place.name = g_playerName;
-		g_2place.level = g_level;
-	
-	}
-	if (g_playerCredits >= g_1place.points)
-	{
-		g_1place.points = g_playerCredits;
-		g_1place.name = g_playerName;
-		g_1place.level = g_level;
-	
-	}
-	
-	std::cout << "1-st place " << g_1place.name << " scores " << g_1place.points << " level " << g_1place.level << std::endl;
-	std::cout << "2-nd place " << g_2place.name << " scores " << g_2place.points << " level " << g_2place.level << std::endl;
-	std::cout << "3-rd place " << g_3place.name << " scores " << g_3place.points << " level " << g_3place.level << std::endl;
+	//here the data for the highscores should be read from the config file and displayed
+	//example for the name of the first player
+	ConfigFile config("game.cfg");
+	std::string firstPlayerName = config.getValueOfKey<std::string>("firstPlayerName");
+	//afterwards display them
 }
 
 void Menu::Credits(){ }

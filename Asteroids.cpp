@@ -111,8 +111,6 @@ void InitializeShip()
 
 void Fire()
 {
-
-
 	if (rockets.size() < maximumRocketsCount)
 	{
 		if (Global::shipType==1)
@@ -211,6 +209,7 @@ void Update()
 	if (_kbhit())
 	{
 		char key = _getch();
+		//switch from switch and case to if and else if
 		switch (key)
 		{
 		case Global::leftKey:
