@@ -24,10 +24,16 @@ const char AsteroidSymbol = '#';
 int asteroidSpeed = 1;
 // Ship variables
 int shipSpeed = 1;
+//Boss variables
+bool isBossAlive = false;
+string bossDirection = "UP";
 
 int levelPassPoints = 100;
 int currentLevel = 1;
 int maximumAsteroidSize = 4;
+//unsigned int asteroidsKilled = 0;
+//unsigned int asteroidsLevel1 = 30;
+
 
 // Game variables
 unsigned long sleepDuration = 200;
@@ -39,7 +45,7 @@ int maximumRocketsCount = 12;
 vector<GameObject> ship;
 vector<GameObject> asteroids;
 vector<GameObject> rockets;
-
+vector<GameObject> bosses;
 vector<int> d(342342);
 
 unsigned int frameCounter = 0;
@@ -66,6 +72,13 @@ void InitializeShip()
 		{ ' ', '|', '\\', '\'', '-', '.', '_' },
 		{ '/', ' ', '|', ' ', ' ', ' ', ' ', '`' },
 		{ '`', ' ', ' ', '`', }
+	};
+	char shipType3[charRows][charCols] = {
+
+		{ '^', },
+		{ '<', ' ', '#', '=', '-', '>', },
+		{ 'v', }
+
 	};
 #pragma endregion contains types of different ships
 
@@ -105,7 +118,64 @@ void InitializeShip()
 		}
 		break;
 	case 4:
+		for (int rows = 0; rows < charRows; rows++)
+		{
+			for (int cols = 0; cols < charCols; cols++)
+			{
+				if (shipType3[rows][cols] != NULL)
+				{
+					ship.push_back(GameObject(cols + 2, rows + WINDOW_HEIGHT / 2, shipType3[rows][cols]));
+				}
+			}
+		}
 		break;
+	}
+}
+
+void InitializeBoss()
+{
+	int const bossHeight = 10;
+	int const bossWidth = 18;
+	int bossY = (WINDOW_HEIGHT / 2) - (bossHeight / 2);
+	int bossX = WINDOW_WIDTH - bossWidth - 2;
+
+	char bossMatrix[bossHeight][bossWidth] = {
+
+
+		/*{ ' ', ' ', '/', '-', '-', '\\', ' ', ' ' },
+		{ '<', '=', '=', '=', '=', '=', '=', '>' },
+		{ ' ', ' ', '\\', '-', '-', '/', ' ', ' ' },*/
+
+
+		{ ' ', ' ', ' ', ' ', ' ', ' ', '/', '-', '-', '-', '-', '\\', ' ', ' ', ' ', ' ', ' ', ' ' },
+		{ ' ', ' ', ' ', ' ', ' ', '/', ' ', ' ', ' ', ' ', ' ', ' ', '\\', ' ', ' ', ' ', ' ', ' ' },
+		{ '<', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '>' },
+		{ '<', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '>' },
+		{ ' ', ' ', ' ', ' ', ' ', '\\', ' ', ' ', ' ', ' ', ' ', ' ', '/', ' ', ' ', ' ', ' ', ' ' },
+		{ ' ', ' ', ' ', ' ', ' ', ' ', '\\', '-', '-', '-', '-', '/', ' ', ' ', ' ', ' ', ' ', ' ' }
+
+
+
+		/*{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '_', '-', '\'', '~', '~', '~', '~', '\'', '-', '.', '_' },
+		{ ' ', ' ', ' ', ' ', ' ', ' ', '.', ' ', '-', ' ', '~', '\\', '_', '_', '/', ' ', ' ', '\\', '_', '_', '/', '~', '-', ' ', '.' },
+		{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', '.', '-', ' ', '~', '(', 'o', 'o', ')', ' ', ' ', '(', 'o', 'o', ')', '~', '-', ' ', '.' },
+		{ ' ', ' ', ' ', ' ', ' ', '(', '_', '_', '_', '_', '/', '/', '~', '~', '\\', '\\', '/', '/', '~', '~', '\\', '\\', '_', '_', '_', '_', ')' },
+		{ ' ', '_', '.', '-',  '~', '`', ' ', ' ', ' ', ' ',  ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '`', '~', '-', '.', '_' },
+		{ '/',  'O',  '=',  'O',  '=', 'O',  '=', 'O',  '=',  'O',  '=', 'O',  '=',  'O', '=',  'O',  '=', 'O','=','O','=','O','=','O','=','O','=','O','=','O','=','O','=','O','\\'},
+		{ '\\', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '/' },
+		{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\\', 'x', ' ', 'x', ' ', 'x', ' ', 'x', ' ', 'x', ' ', 'x', ' ', 'x', '/' },
+		{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\\', 'x', '_', 'x', '_', 'x', '_', 'x', '_', 'x', '_', 'x', '/' }*/
+	};
+
+	for (int rows = 0; rows < bossHeight; rows++)
+	{
+		for (int cols = 0; cols < bossWidth; cols++)
+		{
+			if (bossMatrix[rows][cols] != NULL && bossMatrix[rows][cols] != ' ')
+			{
+				bosses.push_back(GameObject(cols + bossX, rows + bossY, bossMatrix[rows][cols]));
+			}
+		}
 	}
 }
 
@@ -135,7 +205,7 @@ void Fire()
 			firedRocket = GameObject(firedRocketX, firedRocketY, '-');
 			rockets.push_back(firedRocket);
 		}
-		if (Global::shipType == 2)
+		else if(Global::shipType == 2)
 		{
 			//the element of the ship which is in the middle
 			GameObject mainShipElement = ship[33];
@@ -149,7 +219,16 @@ void Fire()
 			firedRocket = GameObject(firedRocketX, firedRocketY, '_');
 			rockets.push_back(firedRocket);
 		}
-
+		else if(Global::shipType == 4)
+		{
+			//the element of the ship which is in the middle
+			GameObject mainShipElement = ship[5];
+			//fire 2 rockets at once
+			int firedRocketX = mainShipElement.Coordinates.X + 1;
+			int firedRocketY = mainShipElement.Coordinates.Y;
+			GameObject firedRocket = GameObject(firedRocketX, firedRocketY, '-');
+			rockets.push_back(firedRocket);
+		}
 	}
 }
 
@@ -173,6 +252,19 @@ void DetectCollisions()
 			}
 		}
 	}
+	for (randomAccess_iterator boss = bosses.begin(); boss != bosses.end(); ++boss)
+	{
+		for (randomAccess_iterator shipBody = ship.begin(); shipBody != ship.end(); ++shipBody)
+		{
+			bool isXEqual = shipBody->Coordinates.X == boss->Coordinates.X;
+			bool isYEqual = shipBody->Coordinates.Y == boss->Coordinates.Y;
+			if (isXEqual == true && isYEqual == true)
+			{
+				EndGame();
+			}
+		}
+	}
+
 	//detect rocket collisions
 
 	//there are issues with different parity of fired rocket x and asteroid x,
@@ -210,28 +302,36 @@ void Update()
 	{
 		char key = _getch();
 		//switch from switch and case to if and else if
-		switch (key)
+		if (key == Global::leftKey)
 		{
-		case Global::leftKey:
 			direction.X = -shipSpeed;
 			direction.Y = 0;
-			break;
-		case Global::upKey:
+		}
+		else if (key == Global::upKey)
+		{
 			direction.X = 0;
 			direction.Y = -shipSpeed;
-			break;
-		case Global::rightKey:
+		}
+		else if (key == Global::rightKey)
+		{
 			direction.X = shipSpeed;
 			direction.Y = 0;
-			break;
-		case Global::downKey:
+		}
+		else if (key==Global::downKey)
+		{
 			direction.X = 0;
 			direction.Y = shipSpeed;
-			break;
-		case Global::fireKey:
+		}
+		else if (key==Global::fireKey)
+		{
 			Fire();
-			break;
-		};
+			//if (Global::isSoundOn)
+			//{
+
+			//	//PlaySound(TEXT("shoot.mp3"),NULL, SND_FILENAME | SND_ASYNC);
+			//	//PlaySound(NULL, 0, 0);
+			//}
+		}
 	}
 	for (randomAccess_iterator shipBody = ship.begin(); shipBody != ship.end(); ++shipBody)
 	{
@@ -254,59 +354,93 @@ void Update()
 	}
 
 	// Update the position of all asteroids. Remove any asteroid that goes outside the window
-
-	for (randomAccess_iterator asteroid = asteroids.begin(); asteroid != asteroids.end();)
+	if (!isBossAlive)
 	{
-		asteroid->Coordinates.X -= asteroidSpeed;
-		if (asteroid->Coordinates.X <= 0)
-		{
-			asteroid = asteroids.erase(asteroid);
-		}
-		else
-		{
-			++asteroid;
-		}
-	}
 
-	if (frameCounter % levelPassPoints == 0 && frameCounter != 0)
-	{
-		if (asteroidSpawnInterval != 0 && sleepDuration != 0)
+		for (randomAccess_iterator asteroid = asteroids.begin(); asteroid != asteroids.end();)
 		{
-			levelPassPoints += 50;
-			sleepDuration -= 15;
-			currentLevel += 1;
-			maximumAsteroidSize += 1;
-		}
-		if(currentLevel & 1 == 0)
-		{
-			asteroidSpawnInterval -= 1;
-		}
-	}
-
-	if (frameCounter % asteroidSpawnInterval == 0)
-	{
-		// Spawn a new asteroid at every x frames
-
-		//in the console there are more columns than rows
-		//so the asteroids should be wider than they are tall
-		int asteroidWidth = rand() % maximumAsteroidSize + 2; //from 1 to 4
-		int asteroidHeight = rand() % maximumAsteroidSize + 1; //from 1 to 3
-
-		int y = rand() % (WINDOW_HEIGHT - 3) + 3;
-
-		for (int i = 0; i < asteroidWidth; i++)
-		{
-			for (int j = 0; j < asteroidHeight; j++)
+			asteroid->Coordinates.X -= asteroidSpeed;
+			if (asteroid->Coordinates.X <= 0)
 			{
-				if (y + j < WINDOW_HEIGHT)
+				asteroid = asteroids.erase(asteroid);
+			}
+			else
+			{
+				++asteroid;
+			}
+		}
+
+		if (frameCounter % levelPassPoints == 0 && frameCounter != 0)
+		{
+			if (asteroidSpawnInterval != 0 && sleepDuration != 0 && !isBossAlive)
+			{
+				levelPassPoints += 50;
+				sleepDuration -= 15;
+				currentLevel += 1;
+				maximumAsteroidSize += 1;
+			}
+			if (currentLevel & 1 == 0)
+			{
+				asteroidSpawnInterval -= 1;
+			}
+		}
+
+		if (frameCounter % asteroidSpawnInterval == 0)
+		{
+			// Spawn a new asteroid at every x frames
+
+			//in the console there are more columns than rows
+			//so the asteroids should be wider than they are tall
+			int asteroidWidth = rand() % maximumAsteroidSize + 2; //from 1 to 4
+			int asteroidHeight = rand() % maximumAsteroidSize + 1; //from 1 to 3
+
+			int y = rand() % (WINDOW_HEIGHT - 3) + 3;
+
+			for (int i = 0; i < asteroidWidth; i++)
+			{
+				for (int j = 0; j < asteroidHeight; j++)
 				{
-					GameObject newAsteroid = GameObject(WINDOW_WIDTH - 1 - i, y + j, AsteroidSymbol);
-					newAsteroid.Color = ConsoleColors::Red; //TODO: add random color asteroids
-					asteroids.push_back(newAsteroid);
+					if (y + j < WINDOW_HEIGHT)
+					{
+						GameObject newAsteroid = GameObject(WINDOW_WIDTH - 1 - i, y + j, AsteroidSymbol);
+						newAsteroid.Color = ConsoleColors::Red; //TODO: add random color asteroids
+						asteroids.push_back(newAsteroid);
+					}
+					else
+					{
+						asteroids.push_back(GameObject(WINDOW_WIDTH - 1 - i, y, AsteroidSymbol));
+					}
+				}
+			}
+		}
+	}
+	//movements of the boss
+	if (isBossAlive)
+	{
+		for (randomAccess_iterator boss = bosses.begin(); boss != bosses.end();)
+		{
+			if (bossDirection == "UP")
+			{
+				if (boss->Coordinates.Y <= 0)
+				{
+					bossDirection = "Down";
 				}
 				else
 				{
-					asteroids.push_back(GameObject(WINDOW_WIDTH - 1 - i, y, AsteroidSymbol));
+					boss->Coordinates.Y -= asteroidSpeed;
+					++boss;
+				}
+			}
+			else if (bossDirection == "Down")
+			{
+				if (boss->Coordinates.Y >= WINDOW_HEIGHT)
+				{
+					bossDirection = "UP";
+				}
+				else
+				{
+					boss->Coordinates.Y += asteroidSpeed;
+					++boss;
 				}
 			}
 		}
@@ -330,14 +464,23 @@ void Draw()
 	{
 		shipBody->Draw(consoleHandle);
 	}
-
-	for (const_iterator asteroid = asteroids.cbegin(); asteroid != asteroids.cend(); ++asteroid)
+	if (!isBossAlive)
 	{
-		asteroid->Draw(consoleHandle);
+		for (const_iterator asteroid = asteroids.cbegin(); asteroid != asteroids.cend(); ++asteroid)
+		{
+			asteroid->Draw(consoleHandle);
+		}
 	}
 	for (randomAccess_iterator rocket = rockets.begin(); rocket != rockets.end(); ++rocket)
 	{
 		rocket->Draw(consoleHandle);
+	}
+	if (isBossAlive)
+	{
+		for (randomAccess_iterator boss = bosses.begin(); boss != bosses.end(); ++boss)
+		{
+			boss->Draw(consoleHandle);
+		}
 	}
 }
 
@@ -353,6 +496,8 @@ int main()
 	//add the ship
 	InitializeShip();
 
+	InitializeBoss();
+
 	//game loop
 	while (true)
 	{
@@ -367,6 +512,12 @@ int main()
 		{
 			ClearScreen(consoleHandle);
 			return 0;
+		}
+		if (levelPassPoints>=frameCounter)
+		{
+		
+			isBossAlive = true;
+			std::cout << "Kill the boss" << endl;
 		}
 
 		Draw();
