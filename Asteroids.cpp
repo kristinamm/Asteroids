@@ -421,7 +421,7 @@ void Update()
 		{
 			if (bossDirection == "UP")
 			{
-				if (boss->Coordinates.Y <= 0)
+				if (boss->Coordinates.Y <= 5)
 				{
 					bossDirection = "Down";
 				}
@@ -431,11 +431,12 @@ void Update()
 					++boss;
 				}
 			}
-			else if (bossDirection == "Down")
+			else
 			{
-				if (boss->Coordinates.Y >= WINDOW_HEIGHT)
+				if (boss->Coordinates.Y >= WINDOW_HEIGHT - 5 && boss == bosses.end() - 1)
 				{
 					bossDirection = "UP";
+					boss->Coordinates.Y += asteroidSpeed + 1;
 				}
 				else
 				{
@@ -515,7 +516,7 @@ int main()
 		}
 		if (levelPassPoints>=frameCounter)
 		{
-		
+
 			isBossAlive = true;
 			std::cout << "Kill the boss" << endl;
 		}
