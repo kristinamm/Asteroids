@@ -356,10 +356,10 @@ void Update()
 	// Update the position of all asteroids. Remove any asteroid that goes outside the window
 	if (!isBossAlive)
 	{
-
 		for (randomAccess_iterator asteroid = asteroids.begin(); asteroid != asteroids.end();)
 		{
 			asteroid->Coordinates.X -= asteroidSpeed;
+			asteroid->Color = ConsoleColors::Blue;
 			if (asteroid->Coordinates.X <= 0)
 			{
 				asteroid = asteroids.erase(asteroid);
@@ -372,7 +372,8 @@ void Update()
 
 		if (frameCounter % levelPassPoints == 0 && frameCounter != 0)
 		{
-			if (asteroidSpawnInterval != 0 && sleepDuration != 0 && !isBossAlive)
+			isBossAlive = true;
+			if (asteroidSpawnInterval != 0 && sleepDuration != 0)
 			{
 				levelPassPoints += 50;
 				sleepDuration -= 15;
@@ -513,12 +514,6 @@ int main()
 		{
 			ClearScreen(consoleHandle);
 			return 0;
-		}
-		if (levelPassPoints>=frameCounter)
-		{
-
-			isBossAlive = true;
-			std::cout << "Kill the boss" << endl;
 		}
 
 		Draw();
