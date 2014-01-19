@@ -26,15 +26,14 @@ int asteroidSpeed = 1;
 // Ship variables
 int shipSpeed = 1;
 //Boss variables
-bool isBossAlive = false;
+bool isBossAlive = true;
 string bossDirection = "UP";
+int bossHealth = 100;
+unsigned int bossShootSpawnInterval = 7;
 
 int levelPassPoints = 100;
 int currentLevel = 1;
 int maximumAsteroidSize = 4;
-//unsigned int asteroidsKilled = 0;
-//unsigned int asteroidsLevel1 = 30;
-
 
 // Game variables
 unsigned long sleepDuration = 200;
@@ -97,11 +96,11 @@ void InitializeShip()
 	case 2:
 		for (int rows = 0; rows < charRows; rows++)
 		{
-			for (int  cols = 0; cols < charCols; cols++)
+			for (int cols = 0; cols < charCols; cols++)
 			{
 				if (shipType1[rows][cols] != NULL)
 				{
-					ship.push_back(GameObject(cols + 2, rows+WINDOW_HEIGHT/2, shipType1[rows][cols]));
+					ship.push_back(GameObject(cols + 2, rows + WINDOW_HEIGHT / 2, shipType1[rows][cols]));
 				}
 			}
 		}
@@ -212,29 +211,29 @@ void Fire()
 {
 	if (rockets.size() < maximumRocketsCount)
 	{
-		if (shipType==1)
+		if (shipType == 1)
 		{
 			//the element of the ship which is in the middle
 			GameObject mainShipElement = ship[3];
 			//fire 4 rockets at once
-			int firedRocketX = mainShipElement.Coordinates.X + 1;
+			int firedRocketX = mainShipElement.Coordinates.X;
 			int firedRocketY = mainShipElement.Coordinates.Y;
 			GameObject firedRocket = GameObject(firedRocketX, firedRocketY, '-');
 			rockets.push_back(firedRocket);
-			firedRocketX = mainShipElement.Coordinates.X + 2;
+			firedRocketX = mainShipElement.Coordinates.X + 1;
 			firedRocketY = mainShipElement.Coordinates.Y;
 			firedRocket = GameObject(firedRocketX, firedRocketY, '-');
 			rockets.push_back(firedRocket);
-			firedRocketX = mainShipElement.Coordinates.X + 2;
+			firedRocketX = mainShipElement.Coordinates.X + 1;
 			firedRocketY = mainShipElement.Coordinates.Y - 1;
 			firedRocket = GameObject(firedRocketX, firedRocketY, '-');
 			rockets.push_back(firedRocket);
-			firedRocketX = mainShipElement.Coordinates.X + 2;
+			firedRocketX = mainShipElement.Coordinates.X + 1;
 			firedRocketY = mainShipElement.Coordinates.Y + 1;
 			firedRocket = GameObject(firedRocketX, firedRocketY, '-');
 			rockets.push_back(firedRocket);
 		}
-		else if(shipType == 2)
+		else if (shipType == 2)
 		{
 			//the element of the ship which is in the middle
 			GameObject mainShipElement = ship[33];
@@ -248,7 +247,7 @@ void Fire()
 			firedRocket = GameObject(firedRocketX, firedRocketY, '_');
 			rockets.push_back(firedRocket);
 		}
-		else if(shipType == 4)
+		else if (shipType == 4)
 		{
 			//the element of the ship which is in the middle
 			GameObject mainShipElement = ship[5];
@@ -317,9 +316,37 @@ void DetectCollisions()
 				++rocket;
 			}
 		}
-		if(deleteAsteroid == true)
+		if (deleteAsteroid == true)
 		{
 			i = std::distance(asteroids.begin(), asteroids.erase(asteroids.begin() + i));
+		}
+	}
+
+	//detect if boss is hit
+	if (isBossAlive)
+	{
+		for (int i = bosses.size() - 1; i >= 0; i--)
+		{
+			bool isBossHitted = false;
+			for (randomAccess_iterator rocket = rockets.begin(); rocket != rockets.end();)
+			{
+				bool isXEqual = rocket->Coordinates.X == bosses[i].Coordinates.X;
+				bool isYEqual = rocket->Coordinates.Y == bosses[i].Coordinates.Y;
+				if (isXEqual == true && isYEqual == true)
+				{
+					isBossHitted = true;
+					rocket = rockets.erase(rocket);
+				}
+				else
+				{
+					++rocket;
+				}
+			}
+			if (isBossHitted)
+			{
+				i = std::distance(bosses.begin(), bosses.erase(bosses.begin() + i));
+				bossHealth -= 5;
+			}
 		}
 	}
 }
@@ -346,12 +373,12 @@ void Update()
 			direction.X = shipSpeed;
 			direction.Y = 0;
 		}
-		else if (key==downKey)
+		else if (key == downKey)
 		{
 			direction.X = 0;
 			direction.Y = shipSpeed;
 		}
-		else if (key==fireKey)
+		else if (key == fireKey)
 		{
 			Fire();
 			//if (Global::isSoundOn)
@@ -383,37 +410,36 @@ void Update()
 	}
 
 	// Update the position of all asteroids. Remove any asteroid that goes outside the window
+	for (randomAccess_iterator asteroid = asteroids.begin(); asteroid != asteroids.end();)
+	{
+		asteroid->Coordinates.X -= asteroidSpeed;
+		if (asteroid->Coordinates.X <= 0)
+		{
+			asteroid = asteroids.erase(asteroid);
+		}
+		else
+		{
+			++asteroid;
+		}
+	}
+	if (frameCounter % levelPassPoints == 0 && frameCounter != 0)
+	{
+		isBossAlive = true;
+		if (asteroidSpawnInterval != 0 && sleepDuration != 0)
+		{
+			levelPassPoints += 50;
+			sleepDuration -= 15;
+			currentLevel += 1;
+			maximumAsteroidSize += 1;
+		}
+		if (currentLevel & 1 == 0)
+		{
+			asteroidSpawnInterval -= 1;
+		}
+	}
+
 	if (!isBossAlive)
 	{
-		for (randomAccess_iterator asteroid = asteroids.begin(); asteroid != asteroids.end();)
-		{
-			asteroid->Coordinates.X -= asteroidSpeed;
-			if (asteroid->Coordinates.X <= 0)
-			{
-				asteroid = asteroids.erase(asteroid);
-			}
-			else
-			{
-				++asteroid;
-			}
-		}
-
-		if (frameCounter % levelPassPoints == 0 && frameCounter != 0)
-		{
-			isBossAlive = true;
-			if (asteroidSpawnInterval != 0 && sleepDuration != 0)
-			{
-				levelPassPoints += 50;
-				sleepDuration -= 15;
-				currentLevel += 1;
-				maximumAsteroidSize += 1;
-			}
-			if (currentLevel & 1 == 0)
-			{
-				asteroidSpawnInterval -= 1;
-			}
-		}
-
 		if (frameCounter % asteroidSpawnInterval == 0)
 		{
 			// Spawn a new asteroid at every x frames
@@ -431,7 +457,7 @@ void Update()
 			{
 				for (int j = 0; j < asteroidHeight; j++)
 				{
-					GameObject newAsteroid = GameObject(0,0,AsteroidSymbol);
+					GameObject newAsteroid = GameObject(0, 0, AsteroidSymbol);
 					if (y + j < WINDOW_HEIGHT)
 					{
 						newAsteroid = GameObject(WINDOW_WIDTH - 1 - i, y + j, AsteroidSymbol);
@@ -455,7 +481,7 @@ void Update()
 		{
 			if (bossDirection == "UP")
 			{
-				if (boss->Coordinates.Y <= 5)
+				if (boss->Coordinates.Y <= 3)
 				{
 					bossDirection = "Down";
 				}
@@ -479,13 +505,35 @@ void Update()
 				}
 			}
 		}
+
+		//boss shooting 
+		if (frameCounter % bossShootSpawnInterval == 0)
+		{
+			//the element of the ship which is in the middle
+			GameObject mainBossElement = bosses[8];
+			//fire 2 rockets at once
+			int firedRocketX = mainBossElement.Coordinates.X - 1;
+			int firedRocketY = mainBossElement.Coordinates.Y;
+			GameObject firedRocket = GameObject(firedRocketX, firedRocketY, '*');
+			asteroids.push_back(firedRocket);
+
+			firedRocketX = mainBossElement.Coordinates.X;
+			firedRocketY = mainBossElement.Coordinates.Y;
+			GameObject firedRocket2 = GameObject(firedRocketX, firedRocketY, '*');
+			asteroids.push_back(firedRocket2);
+
+			firedRocketX = mainBossElement.Coordinates.X + 1;
+			firedRocketY = mainBossElement.Coordinates.Y;
+			GameObject firedRocket3 = GameObject(firedRocketX, firedRocketY, '*');
+			asteroids.push_back(firedRocket3);
+		}
 	}
 	++frameCounter;
 }
 
 inline bool operator==(const GameObject& go1, const GameObject& go2)
 {
-	if(go1.Coordinates.X == go2.Coordinates.X && go1.Coordinates.Y == go2.Coordinates.Y)
+	if (go1.Coordinates.X == go2.Coordinates.X && go1.Coordinates.Y == go2.Coordinates.Y)
 	{
 		return true;
 	}
@@ -497,24 +545,22 @@ void Draw()
 	ClearScreen(consoleHandle);
 
 	//highscore
-	std::cout<<setw(20)<<"Level: "<<currentLevel;
-	std::cout<<setw(40)<<"Score: "<<frameCounter * 2<<endl;
+	std::cout << setw(20) << "Level: " << currentLevel;
+	std::cout << setw(40) << "Score: " << frameCounter * 2 << endl;
 	for (int i = 0; i < WINDOW_WIDTH; i++)
 	{
-		cout<<"-";
+		cout << "-";
 	}
 
 	for (const_iterator shipBody = ship.cbegin(); shipBody != ship.cend(); ++shipBody)
 	{
 		shipBody->Draw(consoleHandle);
 	}
-	if (!isBossAlive)
+	for (const_iterator asteroid = asteroids.cbegin(); asteroid != asteroids.cend(); ++asteroid)
 	{
-		for (const_iterator asteroid = asteroids.cbegin(); asteroid != asteroids.cend(); ++asteroid)
-		{
-			asteroid->Draw(consoleHandle);
-		}
+		asteroid->Draw(consoleHandle);
 	}
+
 	for (randomAccess_iterator rocket = rockets.begin(); rocket != rockets.end(); ++rocket)
 	{
 		rocket->Draw(consoleHandle);
