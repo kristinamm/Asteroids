@@ -3,6 +3,7 @@
 #include <conio.h>
 #include <time.h>
 #include <iomanip>
+#include <algorithm>
 
 #include "ConsoleGaming.h"
 #include "Menu.h"
@@ -131,6 +132,34 @@ void InitializeShip()
 		break;
 	}
 }
+
+ConsoleColor randomColor()
+{
+	int randomNumber = rand() % 5 + 1;
+	switch (randomNumber)
+	{
+	case 1:
+		return ConsoleColors::Blue;
+		break;
+	case 2:
+		return ConsoleColors::Cyan;
+		break;
+	case 3:
+		return ConsoleColors::Green;
+		break;
+	case 4:
+		return ConsoleColors::Purple;
+		break;
+	case 5:
+		return ConsoleColors::Red;
+		break;
+	case 6:
+		return ConsoleColors::Yellow;
+		break;
+	}
+	return ConsoleColors::White;
+}
+
 
 void InitializeBoss()
 {
@@ -359,7 +388,6 @@ void Update()
 		for (randomAccess_iterator asteroid = asteroids.begin(); asteroid != asteroids.end();)
 		{
 			asteroid->Coordinates.X -= asteroidSpeed;
-			asteroid->Color = ConsoleColors::Blue;
 			if (asteroid->Coordinates.X <= 0)
 			{
 				asteroid = asteroids.erase(asteroid);
@@ -397,20 +425,25 @@ void Update()
 
 			int y = rand() % (WINDOW_HEIGHT - 3) + 3;
 
+			ConsoleColor asteroidColor = randomColor();
+
 			for (int i = 0; i < asteroidWidth; i++)
 			{
 				for (int j = 0; j < asteroidHeight; j++)
 				{
+					GameObject newAsteroid = GameObject(0,0,AsteroidSymbol);
 					if (y + j < WINDOW_HEIGHT)
 					{
-						GameObject newAsteroid = GameObject(WINDOW_WIDTH - 1 - i, y + j, AsteroidSymbol);
-						newAsteroid.Color = ConsoleColors::Red; //TODO: add random color asteroids
+						newAsteroid = GameObject(WINDOW_WIDTH - 1 - i, y + j, AsteroidSymbol);
+						newAsteroid.Color = asteroidColor;
 						asteroids.push_back(newAsteroid);
 					}
 					else
 					{
-						asteroids.push_back(GameObject(WINDOW_WIDTH - 1 - i, y, AsteroidSymbol));
+						newAsteroid = GameObject(WINDOW_WIDTH - 1 - i, y, AsteroidSymbol);
+						asteroids.push_back(newAsteroid);
 					}
+					std::find(asteroids.begin(), asteroids.end(), newAsteroid)->Color = randomColor();
 				}
 			}
 		}
@@ -448,6 +481,15 @@ void Update()
 		}
 	}
 	++frameCounter;
+}
+
+inline bool operator==(const GameObject& go1, const GameObject& go2)
+{
+	if(go1.Coordinates.X == go2.Coordinates.X && go1.Coordinates.Y == go2.Coordinates.Y)
+	{
+		return true;
+	}
+	return false;
 }
 
 void Draw()
