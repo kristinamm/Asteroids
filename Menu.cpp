@@ -4,7 +4,7 @@
 #include <time.h>
 #include <iomanip>
 
-#include "configParser.cpp"
+//#include "configParser.cpp"
 #include "ConsoleGaming.h"
 #include "Menu.h"
 #include "Global.h"
@@ -61,8 +61,8 @@ void Menu::StartGame()
 {
 	//write all of the fields from the config file in the global.h file
 	//example for upkey
-	ConfigFile config("game.cfg");
-	Global::upKey = config.getValueOfKey<char>("upKey");
+	//ConfigFile config("game.cfg");
+	//upKey = config.getValueOfKey<char>("upKey");
 }
 
 void Menu::Instructions()
@@ -131,8 +131,8 @@ void Menu::HighScore ()
 {
 	//here the data for the highscores should be read from the config file and displayed
 	//example for the name of the first player
-	ConfigFile config("game.cfg");
-	std::string firstPlayerName = config.getValueOfKey<std::string>("firstPlayerName");
+	//ConfigFile config("game.cfg");
+	//std::string firstPlayerName = config.getValueOfKey<std::string>("firstPlayerName");
 	//afterwards display them
 }
 

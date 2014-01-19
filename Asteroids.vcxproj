@@ -79,6 +79,7 @@
     <ClCompile Include="configParser.cpp" />
     <ClCompile Include="ConsoleGaming.cpp" />
     <ClCompile Include="Asteroids.cpp" />
+    <ClCompile Include="Global.cpp" />
     <ClCompile Include="Menu.cpp" />
   </ItemGroup>
   <ItemGroup>

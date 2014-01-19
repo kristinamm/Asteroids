@@ -82,7 +82,7 @@ void InitializeShip()
 	};
 #pragma endregion contains types of different ships
 
-	switch (Global::shipType)
+	switch (shipType)
 	{
 	case 1:
 		ship.push_back(GameObject(shipX - 2, shipY - 1, shipSymbol));
@@ -183,7 +183,7 @@ void Fire()
 {
 	if (rockets.size() < maximumRocketsCount)
 	{
-		if (Global::shipType==1)
+		if (shipType==1)
 		{
 			//the element of the ship which is in the middle
 			GameObject mainShipElement = ship[3];
@@ -205,7 +205,7 @@ void Fire()
 			firedRocket = GameObject(firedRocketX, firedRocketY, '-');
 			rockets.push_back(firedRocket);
 		}
-		else if(Global::shipType == 2)
+		else if(shipType == 2)
 		{
 			//the element of the ship which is in the middle
 			GameObject mainShipElement = ship[33];
@@ -219,7 +219,7 @@ void Fire()
 			firedRocket = GameObject(firedRocketX, firedRocketY, '_');
 			rockets.push_back(firedRocket);
 		}
-		else if(Global::shipType == 4)
+		else if(shipType == 4)
 		{
 			//the element of the ship which is in the middle
 			GameObject mainShipElement = ship[5];
@@ -302,27 +302,27 @@ void Update()
 	{
 		char key = _getch();
 		//switch from switch and case to if and else if
-		if (key == Global::leftKey)
+		if (key == leftKey)
 		{
 			direction.X = -shipSpeed;
 			direction.Y = 0;
 		}
-		else if (key == Global::upKey)
+		else if (key == upKey)
 		{
 			direction.X = 0;
 			direction.Y = -shipSpeed;
 		}
-		else if (key == Global::rightKey)
+		else if (key == rightKey)
 		{
 			direction.X = shipSpeed;
 			direction.Y = 0;
 		}
-		else if (key==Global::downKey)
+		else if (key==downKey)
 		{
 			direction.X = 0;
 			direction.Y = shipSpeed;
 		}
-		else if (key==Global::fireKey)
+		else if (key==fireKey)
 		{
 			Fire();
 			//if (Global::isSoundOn)
