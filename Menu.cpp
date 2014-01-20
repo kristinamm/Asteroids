@@ -9,14 +9,91 @@
 #include "Menu.h"
 #include "Global.h"
 
+
+const std::string Logo[9] = {
+	//Sorry, but i have to put two backslashes when i want to display only one. It doesn't look as good as i would want in the code
+	"                                                              L.Ray\n",
+	"                             _                 _     _                           \n",
+	"                   /\\       | |               (_)   | |                         \n",
+	"                  /  \\   ___| |_ ___ _ __ ___  _  __| |___                      \n",
+	"                 / /\\ \\ / __| __/ _ \\ '__/ _ \\| |/ _` / __|                  \n",
+	"                / ____ \\\\__ \\ ||  __/ | | (_) | | (_| \\__ \\                 \n",
+	"               /_/    \\_\\\___/\\__\\___|_|  \\___/|_|\\__,_|___/               \n",
+	"  \n",
+	"  \n",
+};
+bool ShowIntro = true;
+
+
+void Menu::ColorGray()
+{
+
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+
+}
+
+void Menu::ColorLwhite()
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+}
+
+void Menu::ColorCyan()
+{	
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
+}
+
+void Menu::ColorRed()
+{	
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+}
+
+void Menu::ColorReset()
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7); 
+}
+
 void Menu::Initialize() 
 {
 	char key;
 
 	system("cls");
 	//Displays Options
-	std::cout << std::setw(39) << "MAIN MENU"<< std::endl;
-	std::cout << std::setw(57) << "Please make your selection"<< std::endl;
+
+	if (ShowIntro)
+	{
+		Sleep(200);
+		Menu::ColorCyan();
+		for (int x = 0; x < 10; x++)
+		{
+
+			if (x == 9){ std::cout << std::endl; }
+
+			if (x >= 8)
+			{
+				Menu::ColorGray();
+				std::cout << Logo[0];
+				Menu::ColorCyan();
+			}
+
+			if (x >= 7){ std::cout << Logo[1]; }
+			if (x >= 6){ std::cout << Logo[2]; }
+			if (x >= 5){ std::cout << Logo[3]; }
+			if (x >= 4){ std::cout << Logo[4]; }
+			if (x >= 3){ std::cout << Logo[5]; }
+			if (x >= 2){ std::cout << Logo[6]; }
+			if (x >= 1){ std::cout << Logo[7]; }
+			if (x >= 0){ std::cout << Logo[8]; }
+
+			Sleep(100);
+			if (x<9){ system("cls"); }
+		}
+	}
+	//Menu::ColorReset();
+	Beep(300, 50); Beep(400, 400);
+
+
+	//std::cout << std::setw(39) << "MAIN MENU"<< std::endl;
+	//std::cout << std::setw(57) << "Please make your selection"<< std::endl;
 	std::cout << "1 - Start game\n";
 	std::cout << "2 - Instructions\n";
 	std::cout << "3 - Hightest score\n";
@@ -35,7 +112,7 @@ void Menu::Initialize()
 			// "Start game";
 			return;
 		case '2':
-			std::cout << "Instructions";
+			Menu::Instructions();
 			return;
 		case '3':
 			std::cout << "Highest score";
@@ -50,6 +127,7 @@ void Menu::Initialize()
 		}
 	} while (key != '1' || key != '5');
 }
+
 void Menu::NewGame()
 {
  // Player enters his name
@@ -89,7 +167,7 @@ void Menu::Instructions()
 		switch (key)
 		{
 		case '1':
-			Menu();
+			Menu::Initialize();
 			break;
 		case '2':
 			//	exitGame = true;
