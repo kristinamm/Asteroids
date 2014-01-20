@@ -26,7 +26,7 @@ int asteroidSpeed = 1;
 // Ship variables
 int shipSpeed = 1;
 //Boss variables
-bool isBossAlive = true;
+bool isBossAlive = false;
 string bossDirection = "UP";
 int bossHealth = 100;
 unsigned int bossShootSpawnInterval = 7;
@@ -422,12 +422,21 @@ void Update()
 			++asteroid;
 		}
 	}
-	if (frameCounter % levelPassPoints == 0 && frameCounter != 0)
+	if (frameCounter % levelPassPoints == 0 && frameCounter != 0 && !isBossAlive)
 	{
+		asteroids.clear();
+		rockets.clear();
+		InitializeBoss();
 		isBossAlive = true;
+	}
+	if (bossHealth <= 0 && isBossAlive)
+	{
+		isBossAlive = false;
+		bossHealth = 100;
+		bosses.clear();
 		if (asteroidSpawnInterval != 0 && sleepDuration != 0)
 		{
-			levelPassPoints += 50;
+			levelPassPoints += (50 * currentLevel);
 			sleepDuration -= 15;
 			currentLevel += 1;
 			maximumAsteroidSize += 1;
@@ -545,8 +554,17 @@ void Draw()
 	ClearScreen(consoleHandle);
 
 	//highscore
-	std::cout << setw(20) << "Level: " << currentLevel;
-	std::cout << setw(40) << "Score: " << frameCounter * 2 << endl;
+	if (!isBossAlive)
+	{
+		std::cout << setw(20) << "Level: " << currentLevel;
+		std::cout << setw(40) << "Score: " << frameCounter * 2 << endl;
+	}
+	if (isBossAlive)
+	{
+		std::cout << setw(20) << "Level: " << currentLevel;
+		std::cout << setw(20) << "Score: " << frameCounter * 2;
+		std::cout << setw(20) << "Health: " << bossHealth << endl;
+	}
 	for (int i = 0; i < WINDOW_WIDTH; i++)
 	{
 		cout << "-";
@@ -586,7 +604,7 @@ int main()
 	//add the ship
 	InitializeShip();
 
-	InitializeBoss();
+
 
 	//game loop
 	while (true)
