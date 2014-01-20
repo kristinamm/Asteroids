@@ -3,6 +3,7 @@
 #include <conio.h>
 #include <time.h>
 #include <iomanip>
+#include <fstream>
 
 //#include "configParser.cpp"
 #include "ConsoleGaming.h"
@@ -224,11 +225,15 @@ void Menu::Options()
 
 void Menu::HighScore ()
 {
-	//here the data for the highscores should be read from the config file and displayed
-	//example for the name of the first player
-	//ConfigFile config("game.cfg");
-	//std::string firstPlayerName = config.getValueOfKey<std::string>("firstPlayerName");
-	//afterwards display them
+	std::cout << std::setw (40) << "HighScores"<< std::endl;
+	ifstream stream;
+	stream.open("HighScores.txt"); 
+	string line; if (stream.is_open())
+	{ 
+		while ( getline (stream,line) ) 
+		{ cout << line << '\n'; } 
+		stream.close();
+
 }
 
 void Menu::Credits(){ }
