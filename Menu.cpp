@@ -9,9 +9,6 @@
 #include "Menu.h"
 #include "Global.h"
 
-
-<<<<<<< HEAD
-=======
 const std::string Logo[9] = {
 	//Sorry, but i have to put two backslashes when i want to display only one. It doesn't look as good as i would want in the code
 	"                                                              L.Raykov, S.Sinapov, K.Mileva, K.Kartuleva\n",
@@ -39,7 +36,7 @@ bool ShowIntro = true;
 void Menu::ColorGray()
 {
 
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
 
 }
 
@@ -62,15 +59,12 @@ void Menu::ColorReset()
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7); 
 }
-
->>>>>>> ea78a0108a6e74a8ced38e505a75c984070644f7
 void Menu::Initialize() 
 {
 	char key;
 
 	system("cls");
 	//Displays Options
-<<<<<<< HEAD
 	std::cout << std::setw(39) << "MAIN MENU"<< std::endl;
 	std::cout << std::setw(57) << "Please make your selection"<< std::endl;
 	std::cout << "1 - New Game\n";
@@ -78,7 +72,6 @@ void Menu::Initialize()
 	std::cout << "3 - Hightest score\n";
 	std::cout << "4 - Options\n";
 	std::cout << "5 - Quit\n";
-=======
 
 	if (ShowIntro)
 	{
@@ -121,7 +114,6 @@ void Menu::Initialize()
 		std::cout << MainMenu[3];
 		std::cout << MainMenu[4];
 	}
->>>>>>> ea78a0108a6e74a8ced38e505a75c984070644f7
 
 	do
 	{
@@ -134,32 +126,21 @@ void Menu::Initialize()
 			NewGame();
 			return;
 		case '2':
-<<<<<<< HEAD
 			Instructions();
-=======
-			Menu::Instructions();
->>>>>>> ea78a0108a6e74a8ced38e505a75c984070644f7
 			return;
 		case '3':
 			HighScore();
 			return;
 		case '4':
-<<<<<<< HEAD
 			Options();
 			return;
 		case '5':
 			exit(0);
-=======
 			Menu::Options();
 			break;
-		case '5':
-			exit(EXIT_SUCCESS);
->>>>>>> ea78a0108a6e74a8ced38e505a75c984070644f7
-			return;
-		}
-	} while (key != '1' || key != '5');
+		} 
+	}while (key != '1' || key != '5');
 }
-
 void Menu::NewGame()
 {
 	system("cls");
@@ -234,10 +215,10 @@ void Menu::Options()
 		switch (key)
 		{
 		case '1':
-		//	SoundsOn ();
+			//	SoundsOn ();
 			return;
 		case '2':
-	//		SoundsOff;
+			//		SoundsOff;
 			return;
 		case '3':
 			Menu::Initialize();
