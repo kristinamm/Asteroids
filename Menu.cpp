@@ -226,13 +226,16 @@ void Menu::Options()
 void Menu::HighScore ()
 {
 	std::cout << std::setw (40) << "HighScores"<< std::endl;
-	ifstream stream;
-	stream.open("HighScores.txt"); 
-	string line; if (stream.is_open())
+	std::ifstream stream;
+	std::stream.open("HighScores.txt"); 
+	std::string line; 
+	if (stream.is_open())
 	{ 
 		while ( getline (stream,line) ) 
-		{ cout << line << '\n'; } 
-		stream.close();
+		{ 
+			std::cout << line << '\n'; 
+		} 
+		std::stream.close();
 
 }
 
