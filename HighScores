@@ -1,6 +1,10 @@
-1st place : Lyubo
-100
-2nd place : Chefo
-75
-3rd place : Nikola
-50
+const std::string HighScores [] ={
+        "                 n",
+        "           1-st place : Lybo              \n",
+        "                 scores: 100              \n",
+        "                 n",
+        "           2-nd place : Chefo              \n",
+        "                 scores: 75              \n","                 n",
+        "           3-rd place : Nikola              \n",
+        "                 scores: 50              \n",
+};
