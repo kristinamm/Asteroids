@@ -28,9 +28,10 @@ int shipSpeed = 1;
 //Boss variables
 bool isBossAlive = false;
 string bossDirection = "UP";
-int bossHealth = 100;
+int bossHealth = 60;
 unsigned int bossShootSpawnInterval = 7;
-
+int bossFrames;
+int score = 0;
 int levelPassPoints = 100;
 int currentLevel = 1;
 int maximumAsteroidSize = 4;
@@ -168,31 +169,12 @@ void InitializeBoss()
 	int bossX = WINDOW_WIDTH - bossWidth - 2;
 
 	char bossMatrix[bossHeight][bossWidth] = {
-
-
-		/*{ ' ', ' ', '/', '-', '-', '\\', ' ', ' ' },
-		{ '<', '=', '=', '=', '=', '=', '=', '>' },
-		{ ' ', ' ', '\\', '-', '-', '/', ' ', ' ' },*/
-
-
 		{ ' ', ' ', ' ', ' ', ' ', ' ', '/', '-', '-', '-', '-', '\\', ' ', ' ', ' ', ' ', ' ', ' ' },
 		{ ' ', ' ', ' ', ' ', ' ', '/', ' ', ' ', ' ', ' ', ' ', ' ', '\\', ' ', ' ', ' ', ' ', ' ' },
 		{ '<', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '>' },
 		{ '<', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '>' },
 		{ ' ', ' ', ' ', ' ', ' ', '\\', ' ', ' ', ' ', ' ', ' ', ' ', '/', ' ', ' ', ' ', ' ', ' ' },
 		{ ' ', ' ', ' ', ' ', ' ', ' ', '\\', '-', '-', '-', '-', '/', ' ', ' ', ' ', ' ', ' ', ' ' }
-
-
-
-		/*{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '_', '-', '\'', '~', '~', '~', '~', '\'', '-', '.', '_' },
-		{ ' ', ' ', ' ', ' ', ' ', ' ', '.', ' ', '-', ' ', '~', '\\', '_', '_', '/', ' ', ' ', '\\', '_', '_', '/', '~', '-', ' ', '.' },
-		{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', '.', '-', ' ', '~', '(', 'o', 'o', ')', ' ', ' ', '(', 'o', 'o', ')', '~', '-', ' ', '.' },
-		{ ' ', ' ', ' ', ' ', ' ', '(', '_', '_', '_', '_', '/', '/', '~', '~', '\\', '\\', '/', '/', '~', '~', '\\', '\\', '_', '_', '_', '_', ')' },
-		{ ' ', '_', '.', '-',  '~', '`', ' ', ' ', ' ', ' ',  ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '`', '~', '-', '.', '_' },
-		{ '/',  'O',  '=',  'O',  '=', 'O',  '=', 'O',  '=',  'O',  '=', 'O',  '=',  'O', '=',  'O',  '=', 'O','=','O','=','O','=','O','=','O','=','O','=','O','=','O','=','O','\\'},
-		{ '\\', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '/' },
-		{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\\', 'x', ' ', 'x', ' ', 'x', ' ', 'x', ' ', 'x', ' ', 'x', ' ', 'x', '/' },
-		{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\\', 'x', '_', 'x', '_', 'x', '_', 'x', '_', 'x', '_', 'x', '/' }*/
 	};
 
 	for (int rows = 0; rows < bossHeight; rows++)
@@ -432,11 +414,12 @@ void Update()
 	if (bossHealth <= 0 && isBossAlive)
 	{
 		isBossAlive = false;
-		bossHealth = 100;
+		bossHealth = 60 + 10*currentLevel;
 		bosses.clear();
+		frameCounter = 0;
 		if (asteroidSpawnInterval != 0 && sleepDuration != 0)
 		{
-			levelPassPoints += (50 * currentLevel);
+			levelPassPoints += 50;
 			sleepDuration -= 15;
 			currentLevel += 1;
 			maximumAsteroidSize += 1;
@@ -538,6 +521,7 @@ void Update()
 		}
 	}
 	++frameCounter;
+	score += frameCounter;
 }
 
 inline bool operator==(const GameObject& go1, const GameObject& go2)
@@ -557,12 +541,12 @@ void Draw()
 	if (!isBossAlive)
 	{
 		std::cout << setw(20) << "Level: " << currentLevel;
-		std::cout << setw(40) << "Score: " << frameCounter * 2 << endl;
+		std::cout << setw(40) << "Score: " << score << endl;
 	}
 	if (isBossAlive)
 	{
 		std::cout << setw(20) << "Level: " << currentLevel;
-		std::cout << setw(20) << "Score: " << frameCounter * 2;
+		std::cout << setw(20) << "Score: " << score;
 		std::cout << setw(20) << "Health: " << bossHealth << endl;
 	}
 	for (int i = 0; i < WINDOW_WIDTH; i++)
@@ -627,7 +611,7 @@ int main()
 	}
 
 	ClearScreen(consoleHandle);
-	std::cout << "Game Over, your score is: " << frameCounter << endl;
+	std::cout << "Game Over, your score is: " << score<< endl;
 	//TODO: add highscores in externel file
 	return 0;
 }

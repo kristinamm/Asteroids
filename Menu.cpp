@@ -9,6 +9,7 @@
 #include "Menu.h"
 #include "Global.h"
 
+
 void Menu::Initialize() 
 {
 	char key;
@@ -17,7 +18,7 @@ void Menu::Initialize()
 	//Displays Options
 	std::cout << std::setw(39) << "MAIN MENU"<< std::endl;
 	std::cout << std::setw(57) << "Please make your selection"<< std::endl;
-	std::cout << "1 - Start game\n";
+	std::cout << "1 - New Game\n";
 	std::cout << "2 - Instructions\n";
 	std::cout << "3 - Hightest score\n";
 	std::cout << "4 - Options\n";
@@ -25,26 +26,25 @@ void Menu::Initialize()
 
 	do
 	{
-
 		//get choise
 		key = _getch();
 
 		switch (key)
 		{
 		case '1':
-			// "Start game";
+			NewGame();
 			return;
 		case '2':
-			std::cout << "Instructions";
+			Instructions();
 			return;
 		case '3':
-			std::cout << "Highest score";
-			break;
+			HighScore();
+			return;
 		case '4':
-			std::cout << "Settings";
-			break;
+			Options();
+			return;
 		case '5':
-			//exit
+			exit(0);
 			return;
 			break;
 		}
@@ -52,17 +52,24 @@ void Menu::Initialize()
 }
 void Menu::NewGame()
 {
- // Player enters his name
+	system("cls");
+	std::cout<<"Enter your name: ";
+	std::string newPlayerName = "";
+	std::cin>>newPlayerName;
+	StartGame(newPlayerName);
+	return;
 }
 
 void Menu::LoadGame(){ }
 
-void Menu::StartGame()
+void Menu::StartGame(std::string newPlayerName)
 {
 	//write all of the fields from the config file in the global.h file
 	//example for upkey
 	//ConfigFile config("game.cfg");
 	//upKey = config.getValueOfKey<char>("upKey");
+	playerName = newPlayerName;
+	return;
 }
 
 void Menu::Instructions()

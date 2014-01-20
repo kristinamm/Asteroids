@@ -2,7 +2,7 @@
 static class Menu
 {
 	private: 
-		static void Menu::StartGame();
+		static void Menu::StartGame(std::string);
 	public:
 		static void Menu::Initialize();
 		static void Menu::NewGame();
