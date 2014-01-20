@@ -65,13 +65,7 @@ void Menu::Initialize()
 
 	system("cls");
 	//Displays Options
-	std::cout << std::setw(39) << "MAIN MENU"<< std::endl;
-	std::cout << std::setw(57) << "Please make your selection"<< std::endl;
-	std::cout << "1 - New Game\n";
-	std::cout << "2 - Instructions\n";
-	std::cout << "3 - Hightest score\n";
-	std::cout << "4 - Options\n";
-	std::cout << "5 - Quit\n";
+
 
 	if (ShowIntro)
 	{
